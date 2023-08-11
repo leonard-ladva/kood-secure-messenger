@@ -35,6 +35,16 @@ class User extends Equatable {
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != User.empty;
 
+
+  /// Creates a new [User] instance from a json [Map].
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'] as String,
+      email: json['email'] as String?,
+      name: json['name'] as String?,
+      photo: json['photo'] as String?,
+    );
+  }
   @override
   List<Object?> get props => [email, id, name, photo];
 }

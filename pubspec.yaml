@@ -10,6 +10,8 @@ dependencies:
   authentication_repository:
     path: packages/authentication_repository
   bloc: ^8.1.0
+  database_repository:
+    path: packages/database_repository
   equatable: ^2.0.3
   firebase_core: ^2.1.0
   flow_builder: ^0.0.9
