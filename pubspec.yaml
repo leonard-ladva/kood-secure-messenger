@@ -10,6 +10,7 @@ dependencies:
   authentication_repository:
     path: packages/authentication_repository
   bloc: ^8.1.0
+  cached_network_image: ^3.2.3
   database_repository:
     path: packages/database_repository
   equatable: ^2.0.3
@@ -18,12 +19,16 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
+  flutter_ui_avatars: ^0.0.2
   font_awesome_flutter: ^10.1.0
   form_inputs:
     path: packages/form_inputs
   formz: ^0.6.0
   google_fonts: ^4.0.0
+  image_picker: ^1.0.2
   meta: ^1.7.0
+  storage_bucket_repository:
+    path: packages/storage_bucket_repository
 
 dev_dependencies:
   bloc_test: ^9.0.0

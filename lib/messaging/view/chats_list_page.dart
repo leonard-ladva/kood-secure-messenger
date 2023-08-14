@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:relay/app/app.dart';
 
-class ChatsListPage extends StatefulWidget {
+class ChatsListPage extends StatelessWidget {
   const ChatsListPage({super.key});
 
   static Page<void> page() => const MaterialPage<void>(child: ChatsListPage());
 
   @override
-  State<ChatsListPage> createState() => _ChatsListPageState();
-}
-
-class _ChatsListPageState extends State<ChatsListPage> {
-  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Icon(Icons.people, size: 100),
+    return Scaffold(
+      appBar: AppBar(actions: [
+        IconButton(
+          icon: const Icon(Icons.logout_rounded),
+          onPressed: () {
+            context.read<AppBloc>().add(const AppLogoutRequested());
+          },
+        )
+      ]),
+      body: Center(
+        child: Icon(
+          Icons.chat,
+          size: 100,
+        ),
+      ),
     );
   }
 }

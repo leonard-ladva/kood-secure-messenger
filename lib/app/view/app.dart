@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:relay/app/app.dart';
 import 'package:relay/theme.dart';
+import 'package:storage_bucket_repository/storage_bucket_repository.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -18,11 +19,14 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider.value(
+        RepositoryProvider<AuthenticationRepository>.value(
           value: _authenticationRepository,
         ),
-        RepositoryProvider(
+        RepositoryProvider<DatabaseRepository>(
           create: (context) => DatabaseRepository(),
+        ),
+        RepositoryProvider<StorageBucketRepository>(
+          create: (context) => StorageBucketRepository(),
         ),
       ],
       child: BlocProvider(

@@ -12,6 +12,7 @@ class User extends Equatable {
     this.email,
     this.name,
     this.photo,
+    this.isApplockEnabled,
   });
 
   /// The current user's email address.
@@ -26,6 +27,9 @@ class User extends Equatable {
   /// Url for the current user's photo.
   final String? photo;
 
+  ///
+  final bool? isApplockEnabled;
+
   /// Empty user which represents an unauthenticated user.
   static const empty = User(id: '');
 
@@ -35,7 +39,6 @@ class User extends Equatable {
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != User.empty;
 
-
   /// Creates a new [User] instance from a json [Map].
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -43,8 +46,20 @@ class User extends Equatable {
       email: json['email'] as String?,
       name: json['name'] as String?,
       photo: json['photo'] as String?,
+      isApplockEnabled: json['isApplockEnabled'] as bool?,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'name': name,
+      'photo': photo,
+      'isApplockEnabled': isApplockEnabled,
+    };
+  }
+
   @override
-  List<Object?> get props => [email, id, name, photo];
+  List<Object?> get props => [email, id, name, photo, isApplockEnabled];
 }

@@ -20,46 +20,61 @@ class WelcomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Welcome"),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
-                      (states) => const Color(0xFFF9F6EE),
-                    ),
-                    foregroundColor: MaterialStateColor.resolveWith(
-                      (states) => Colors.black,
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                  onPressed: () =>
-                      Navigator.of(context).push<void>(LoginPage.route()),
-                  child: Text("Sign In"),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-
-                  onPressed: () =>
-                      Navigator.of(context).push<void>(SignUpPage.route()),
-                  child: Text('Sign Up'),
-                ),
-              ),
+              _SignInButton(),
+              _SignUpButton(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _SignInButton extends StatelessWidget {
+  const _SignInButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateColor.resolveWith(
+            (states) => const Color(0xFFF9F6EE),
+          ),
+          foregroundColor: MaterialStateColor.resolveWith(
+            (states) => Colors.black,
+          ),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+        ),
+        onPressed: () => Navigator.of(context).push<void>(LoginPage.route()),
+        child: Text("Sign In"),
+      ),
+    );
+  }
+}
+
+class _SignUpButton extends StatelessWidget {
+  const _SignUpButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+        ),
+        onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
+        child: Text('Sign Up'),
       ),
     );
   }

@@ -14,6 +14,19 @@ class GetUserProfileFailure implements Exception {
   final String message;
 }
 
+/// {@template save_user_profile_failure}
+/// Thrown when attempting to save the users profile.
+/// {@endtemplate}
+class SaveUserProfileFailure implements Exception {
+  /// {@macro save_user_profile_failure}
+  const SaveUserProfileFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
+
 /// {@template database_repository}
 /// Repository which manages cloud data storage.
 /// {@endtemplate}
@@ -43,5 +56,13 @@ class DatabaseRepository {
     }
   }
 
-
+  /// Saves user data in firestore
+  Future<User> saveUser(User user) async {
+    try {
+      await _firestore.collection('users').doc(user.id).set(user.toJson());
+      return user;
+    } catch (_) {
+      throw SaveUserProfileFailure();
+    }
+  }
 }

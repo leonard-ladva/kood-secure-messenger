@@ -1,0 +1,19 @@
+name: storage_bucket_repository
+description: Dart package which manages the storage domain.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  firebase_core: ^2.12.0
+  firebase_storage: ^11.2.5
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  firebase_core_platform_interface: ^4.8.0
+  flutter_test:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.4
