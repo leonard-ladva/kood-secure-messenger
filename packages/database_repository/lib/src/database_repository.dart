@@ -27,6 +27,32 @@ class SaveUserProfileFailure implements Exception {
   final String message;
 }
 
+/// {@template update_user_profile_failure}
+/// Thrown when updating the user profile fails.
+/// {@endtemplate}
+class UpdateUserProfileFailure implements Exception {
+  /// {@macro update_user_profile_failure}
+  const UpdateUserProfileFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
+
+/// {@template update_user_onboarding_status_failure}
+/// Thrown when updating the user onboarding status fails.
+/// {@endtemplate}
+class UpdateUserOnboardingStatusFailure implements Exception {
+  /// {@macro update_user_onboarding_status_failure}
+  const UpdateUserOnboardingStatusFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
+
 /// {@template database_repository}
 /// Repository which manages cloud data storage.
 /// {@endtemplate}
@@ -63,6 +89,26 @@ class DatabaseRepository {
       return user;
     } catch (_) {
       throw SaveUserProfileFailure();
+    }
+  }
+
+  Future<void> updateUserOnboardingStatus(
+      User user, OnboardingFlowStatus status) async {
+    try {
+      await _firestore.collection('users').doc(user.id).update({
+        'onboardingFlowStatus': status.toJson(),
+      });
+    } catch (_) {
+      throw UpdateUserOnboardingStatusFailure();
+    }
+  }
+
+  Future<User> updateUser(User user) async {
+    try {
+      await _firestore.collection('users').doc(user.id).update(user.toJson());
+      return user;
+    } catch (_) {
+      throw UpdateUserProfileFailure();
     }
   }
 }

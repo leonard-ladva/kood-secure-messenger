@@ -1,8 +1,10 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
+import 'package:relay/app/app.dart';
 import 'package:relay/onboarding_flow/onboarding_flow.dart';
 import 'package:relay/profile_setup/profile_setup.dart';
 
@@ -20,12 +22,13 @@ class ProfileSetupForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.user);
     return BlocListener<ProfileSetupCubit, ProfileSetupState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
           context
               .read<OnboardingFlowCubit>()
-              .setStatus(OnboardingFlowStatus.appLockSetup);
+              .setStatus(user, OnboardingFlowStatus.appLockSetup);
 
           context.flow<OnboardingFlowStatus>().update(
                 (_) => context.read<OnboardingFlowCubit>().state.status,
@@ -102,10 +105,10 @@ class _PhotoInput extends StatelessWidget {
   String initials(String name) {
     name = name.trim();
     var names = name.split(' '),
-        initials = names[0].substring(0, 1).toUpperCase();
+        initials = names.first.substring(0, 1).toUpperCase();
 
     if (names.length > 1) {
-      initials += names[names.length - 1].substring(0, 1).toUpperCase();
+      initials += names.last.substring(0, 1).toUpperCase();
     }
 
     return initials;

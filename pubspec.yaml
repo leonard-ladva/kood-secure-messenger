@@ -26,6 +26,9 @@ dependencies:
   formz: ^0.6.0
   google_fonts: ^4.0.0
   image_picker: ^1.0.2
+  local_auth: ^2.1.6
+  local_storage_repository:
+    path: packages/local_storage_repository
   meta: ^1.7.0
   storage_bucket_repository:
     path: packages/storage_bucket_repository

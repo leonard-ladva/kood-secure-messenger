@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -23,19 +24,32 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         ));
         return;
       }
+
+      if (user.onboardingFlowStatus == null) {
+        emit(OnboardingFlowState(
+          status: OnboardingFlowStatus.appLockSetup,
+        ));
+        return;
+      }
+
       emit(state.copyWith(
-        status: user.isApplockEnabled == true
-            ? OnboardingFlowStatus.completed
-            : OnboardingFlowStatus.appLockSetup,
+        status: user.onboardingFlowStatus,
       ));
     } on GetUserProfileFailure catch (e) {
       log("OnboardingFlowState error: $e");
     }
   }
 
-  void setStatus(OnboardingFlowStatus status) {
-    emit(state.copyWith(
-      status: status,
-    ));
+  void setStatus(User user, OnboardingFlowStatus status) async {
+    try {
+      await _databaseRepository.updateUserOnboardingStatus(user, status);
+      emit(state.copyWith(
+        status: status,
+      ));
+    } on UpdateUserOnboardingStatusFailure catch (e) {
+      log("UpdateUserProfileFailure error: $e");
+    } catch (_) {
+      log("UpdateUserProfileFailure error: ");
+    }
   }
 }

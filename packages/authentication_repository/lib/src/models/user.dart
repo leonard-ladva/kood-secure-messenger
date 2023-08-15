@@ -12,7 +12,7 @@ class User extends Equatable {
     this.email,
     this.name,
     this.photo,
-    this.isApplockEnabled,
+    this.onboardingFlowStatus,
   });
 
   /// The current user's email address.
@@ -28,7 +28,7 @@ class User extends Equatable {
   final String? photo;
 
   ///
-  final bool? isApplockEnabled;
+  final OnboardingFlowStatus? onboardingFlowStatus;
 
   /// Empty user which represents an unauthenticated user.
   static const empty = User(id: '');
@@ -39,14 +39,17 @@ class User extends Equatable {
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != User.empty;
 
-  /// Creates a new [User] instance from a json [Map].
+  // /// Creates a new [User] instance from a json [Map].
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] as String,
       email: json['email'] as String?,
       name: json['name'] as String?,
       photo: json['photo'] as String?,
-      isApplockEnabled: json['isApplockEnabled'] as bool?,
+      onboardingFlowStatus: json['onboardingFlowStatus'] == null
+          ? null
+          : OnboardingFlowStatus.fromJson(
+              json['onboardingFlowStatus'] as String),
     );
   }
 
@@ -56,10 +59,35 @@ class User extends Equatable {
       'email': email,
       'name': name,
       'photo': photo,
-      'isApplockEnabled': isApplockEnabled,
+      'onboardingFlowStatus': onboardingFlowStatus?.toJson(),
     };
   }
 
+  User copyWith({
+    String? email,
+    String? id,
+    String? name,
+    String? photo,
+    OnboardingFlowStatus? onboardingFlowStatus,
+  }) {
+    return User(
+      email: email ?? this.email,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      photo: photo ?? this.photo,
+      onboardingFlowStatus: onboardingFlowStatus ?? this.onboardingFlowStatus,
+    );
+  }
+
   @override
-  List<Object?> get props => [email, id, name, photo, isApplockEnabled];
+  List<Object?> get props => [email, id, name, photo, onboardingFlowStatus];
+}
+
+enum OnboardingFlowStatus {
+  profileSetup,
+  appLockSetup,
+  completed;
+
+  String toJson() => name;
+  static OnboardingFlowStatus fromJson(String json) => values.byName(json);
 }

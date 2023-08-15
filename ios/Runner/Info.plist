@@ -59,5 +59,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Face id is used to secure your private chats</string>
 </dict>
 </plist>

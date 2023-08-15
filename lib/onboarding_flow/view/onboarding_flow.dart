@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class OnboardingFlowView extends StatelessWidget {
               OnboardingFlowStatus.profileSetup =>
                 OnboardingFlowPage.page(ProfileSetupView()),
               OnboardingFlowStatus.appLockSetup =>
-                OnboardingFlowPage.page(AppLockSetupView()),
+                OnboardingFlowPage.page(AppLockSetupPage()),
               OnboardingFlowStatus.completed =>
                 OnboardingFlowPage.page(Container()),
             }

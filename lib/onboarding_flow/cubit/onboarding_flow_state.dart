@@ -1,11 +1,5 @@
 part of 'onboarding_flow_cubit.dart';
 
-enum OnboardingFlowStatus {
-  profileSetup,
-  appLockSetup,
-  completed,
-}
-
 final class OnboardingFlowState extends Equatable {
   const OnboardingFlowState({
     this.status = OnboardingFlowStatus.profileSetup,

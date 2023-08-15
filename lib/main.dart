@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:relay/app/app.dart';
 
 Future<void> main() async {
@@ -10,6 +11,7 @@ Future<void> main() async {
   Bloc.observer = const AppBlocObserver();
 
   await Firebase.initializeApp();
+  await LocalStorageRepository.init();
 
   // android status bar / ios navigation bar
   SystemChrome.setSystemUIOverlayStyle(
@@ -24,5 +26,10 @@ Future<void> main() async {
   final authenticationRepository = AuthenticationRepository();
   await authenticationRepository.user.first;
 
-  runApp(App(authenticationRepository: authenticationRepository));
+  final localStorageRepository = await LocalStorageRepository.create();
+
+  runApp(App(
+    authenticationRepository: authenticationRepository,
+    localStorageRepository: localStorageRepository,
+  ));
 }
