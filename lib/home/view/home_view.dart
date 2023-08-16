@@ -2,9 +2,8 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:relay/app/app.dart';
-import 'package:relay/messaging/view/chats_list_page.dart';
-import 'package:relay/onboarding_flow/cubit/onboarding_flow_cubit.dart';
-import 'package:relay/onboarding_flow/view/onboarding_flow.dart';
+import 'package:relay/chat_list/chat_list.dart';
+import 'package:relay/onboarding_flow/onboarding_flow.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -19,7 +18,7 @@ class HomeView extends StatelessWidget {
         await Navigator.of(context).push(OnboardingFlow.route());
         context.read<OnboardingFlowCubit>().getStatus(user.id);
       },
-      child: ChatsListPage(),
+      child: ChatListPage(),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:database_repository/database_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,9 +28,11 @@ Future<void> main() async {
   await authenticationRepository.user.first;
 
   final localStorageRepository = await LocalStorageRepository.create();
+  final databaseRepository = DatabaseRepository();
 
   runApp(App(
     authenticationRepository: authenticationRepository,
+    databaseRepository: databaseRepository,
     localStorageRepository: localStorageRepository,
   ));
 }

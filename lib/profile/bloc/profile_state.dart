@@ -2,7 +2,6 @@ part of 'profile_bloc.dart';
 
 enum ProfileStatus {
   completed,
-  uncompleted,
   failure,
 }
 
@@ -12,8 +11,6 @@ final class ProfileState extends Equatable {
     this.user = User.empty,
     this.errorMessage,
   });
-
-  const ProfileState.uncompleted() : this._(status: ProfileStatus.uncompleted);
 
   const ProfileState.failure(String errorMessage)
       : this._(

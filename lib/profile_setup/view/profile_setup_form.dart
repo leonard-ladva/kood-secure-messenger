@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
 import 'package:relay/app/app.dart';
+import 'package:relay/helpers/helpers.dart';
 import 'package:relay/onboarding_flow/onboarding_flow.dart';
 import 'package:relay/profile_setup/profile_setup.dart';
 
@@ -102,18 +103,6 @@ class _NameInput extends StatelessWidget {
 }
 
 class _PhotoInput extends StatelessWidget {
-  String initials(String name) {
-    name = name.trim();
-    var names = name.split(' '),
-        initials = names.first.substring(0, 1).toUpperCase();
-
-    if (names.length > 1) {
-      initials += names.last.substring(0, 1).toUpperCase();
-    }
-
-    return initials;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileSetupCubit, ProfileSetupState>(

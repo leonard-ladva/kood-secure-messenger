@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
-import 'package:relay/login/view/login_page.dart';
-import 'package:relay/sign_up/cubit/sign_up_cubit.dart';
+import 'package:relay/login/login.dart';
 import 'package:relay/sign_up/sign_up.dart';
 
 const Map<PasswordValidationError, String> passwordErrorMessages = {

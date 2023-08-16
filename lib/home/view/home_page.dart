@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:relay/app/app.dart';
 import 'package:relay/home/home.dart';
-import 'package:relay/onboarding_flow/cubit/onboarding_flow_cubit.dart';
+import 'package:relay/onboarding_flow/onboarding_flow.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

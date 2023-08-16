@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:relay/login/view/view.dart';
+import 'package:relay/login/login.dart';
 import 'package:relay/sign_up/sign_up.dart';
 
 class WelcomePage extends StatelessWidget {

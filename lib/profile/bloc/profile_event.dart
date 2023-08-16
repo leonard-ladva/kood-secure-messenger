@@ -12,3 +12,9 @@ final class ProfileStatusRequested extends ProfileEvent {
 
   final User user;
 }
+
+final class _AppUserChanged extends ProfileEvent {
+  const _AppUserChanged(this.user);
+
+  final User user;
+}
