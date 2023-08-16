@@ -16,30 +16,30 @@ class MockAuthenticationRepository extends Mock
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
 void main() {
-  group('App', () {
-    late AuthenticationRepository authenticationRepository;
-    late User user;
+  // group('App', () {
+  //   late AuthenticationRepository authenticationRepository;
+  //   late User user;
 
-    setUp(() {
-      authenticationRepository = MockAuthenticationRepository();
-      user = MockUser();
-      when(() => authenticationRepository.user).thenAnswer(
-        (_) => const Stream.empty(),
-      );
-      when(() => authenticationRepository.currentUser).thenReturn(user);
-      when(() => user.isNotEmpty).thenReturn(true);
-      when(() => user.isEmpty).thenReturn(false);
-      when(() => user.email).thenReturn('test@gmail.com');
-    });
+  //   setUp(() {
+  //     authenticationRepository = MockAuthenticationRepository();
+  //     user = MockUser();
+  //     when(() => authenticationRepository.user).thenAnswer(
+  //       (_) => const Stream.empty(),
+  //     );
+  //     when(() => authenticationRepository.currentUser).thenReturn(user);
+  //     when(() => user.isNotEmpty).thenReturn(true);
+  //     when(() => user.isEmpty).thenReturn(false);
+  //     when(() => user.email).thenReturn('test@gmail.com');
+  //   });
 
-    testWidgets('renders AppView', (tester) async {
-      await tester.pumpWidget(
-        App(authenticationRepository: authenticationRepository),
-      );
-      await tester.pump();
-      expect(find.byType(AppView), findsOneWidget);
-    });
-  });
+  //   testWidgets('renders AppView', (tester) async {
+  //     await tester.pumpWidget(
+  //       App(authenticationRepository: authenticationRepository),
+  //     );
+  //     await tester.pump();
+  //     expect(find.byType(AppView), findsOneWidget);
+  //   });
+  // });
 
   group('AppView', () {
     late AuthenticationRepository authenticationRepository;

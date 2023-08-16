@@ -12,17 +12,41 @@ class WelcomePage extends StatelessWidget {
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 32.0,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Welcome"),
-              _SignInButton(),
-              _SignUpButton(),
-            ],
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 32.0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(flex: 3),
+                Text.rich(
+                  TextSpan(
+                    text: 'Welcome to ',
+                    style: TextStyle(
+                      fontSize: 80,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: '',
+                      height: 1.2,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'Relay',
+                        style: TextStyle(
+                          color: Color(0xFF2090ea),
+                        ),
+                      )
+                    ],
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                const Spacer(flex: 2),
+                _SignInButton(),
+                _SignUpButton(),
+                const Spacer(flex: 4)
+              ],
+            ),
           ),
         ),
       ),
@@ -67,6 +91,9 @@ class _SignUpButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ButtonStyle(
+          backgroundColor: MaterialStateColor.resolveWith(
+            (states) => const Color(0xFF2090ea),
+          ),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),

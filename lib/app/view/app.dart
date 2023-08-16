@@ -13,8 +13,8 @@ class App extends StatelessWidget {
     required AuthenticationRepository authenticationRepository,
     required LocalStorageRepository localStorageRepository,
     super.key,
-  }) : _authenticationRepository = authenticationRepository,
-       _localStorageRepository = localStorageRepository;
+  })  : _authenticationRepository = authenticationRepository,
+        _localStorageRepository = localStorageRepository;
 
   final AuthenticationRepository _authenticationRepository;
   final LocalStorageRepository _localStorageRepository;
@@ -39,6 +39,7 @@ class App extends StatelessWidget {
       child: BlocProvider(
         create: (_) => AppBloc(
           authenticationRepository: _authenticationRepository,
+          localStorageRepository: _localStorageRepository,
         ),
         child: const AppView(),
       ),
