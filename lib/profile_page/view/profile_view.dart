@@ -1,33 +1,50 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:relay/helpers/helpers.dart';
+import 'package:relay/profile_page/profile_page.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage(this.user, {super.key});
-  final User user;
-
-  static Page<void> page(User user) =>
-      MaterialPage<void>(child: ProfilePage(user));
+class ProfileView extends StatelessWidget {
+  const ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _PhotoWidget(user),
-            const SizedBox(height: 16),
-            _NameWidget(user),
-            const SizedBox(height: 16),
-            _EmailWidget(user),
-            const SizedBox(height: 16),
-            _ChatButton(user),
-          ],
-        ),
-      ),
+    return BlocBuilder<ProfilePageCubit, ProfilePageState>(
+      builder: (context, state) {
+        if (state.status == ProfilePageStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (state.status == ProfilePageStatus.failure) {
+          return Center(
+            child: Text(state.errorMessage ?? 'Error'),
+          );
+        }
+        return SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _PhotoWidget(state.user),
+              const SizedBox(height: 16),
+              _NameWidget(state.user),
+              const SizedBox(height: 16),
+              _EmailWidget(state.user),
+              const SizedBox(height: 16),
+              _ChatButton(state.user),
+              const SizedBox(height: 16),
+              QrImageView(
+                data:
+                    'relaymessenger://www.relay-messenger.com/user/${state.user.id}',
+                size: 200,
+                backgroundColor: Colors.white,
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -46,7 +63,7 @@ class _PhotoWidget extends StatelessWidget {
           user.name ?? '',
         ),
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 50,
           fontWeight: FontWeight.bold,
           color: Color(0xFF528617),
         ),

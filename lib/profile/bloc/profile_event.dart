@@ -8,9 +8,9 @@ sealed class ProfileEvent extends Equatable {
 }
 
 final class ProfileStatusRequested extends ProfileEvent {
-  const ProfileStatusRequested(this.user);
+  const ProfileStatusRequested(this.userId);
 
-  final User user;
+  final String userId;
 }
 
 final class _AppUserChanged extends ProfileEvent {

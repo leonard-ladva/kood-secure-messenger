@@ -4,6 +4,7 @@ import 'package:relay/app/app.dart';
 import 'package:relay/chat_list/chat_list.dart';
 import 'package:relay/helpers/helpers.dart';
 import 'package:relay/profile/profile.dart';
+import 'package:relay/profile_page/profile_page.dart';
 
 class ChatListPage extends StatelessWidget {
   const ChatListPage({super.key});
@@ -31,7 +32,7 @@ class ChatListPage extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push<void>(
                 MaterialPageRoute(
-                  builder: (context) => ProfilePage(currentUser),
+                  builder: (context) => ProfilePage(currentUser.id),
                 ),
               );
             },

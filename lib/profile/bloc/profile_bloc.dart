@@ -28,13 +28,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onAppUserChanged(
       _AppUserChanged event, Emitter<ProfileState> emit) async {
-    add(ProfileStatusRequested(event.user));
+    add(ProfileStatusRequested(event.user.id));
   }
 
   void _onProfileStatusRequested(
       ProfileStatusRequested event, Emitter<ProfileState> emit) async {
     try {
-      final user = await _databaseRepository.getUser(event.user.id);
+      final user = await _databaseRepository.getUser(event.userId);
       emit(ProfileState.completed(user));
     } on GetUserProfileFailure catch (e) {
       emit(ProfileState.failure(

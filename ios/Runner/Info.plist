@@ -25,10 +25,13 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>relay-messenger</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.979633879366-ctkb3hh1kse9ljd4c3lhs9djigaukmu2</string>
 				<string>com.googleusercontent.apps.338622659516-5ar7kokf7objomc5mos82o6cm2peq0tn</string>
+        		<string>relaymessenger://www.relay-messenger.com</string>
 			</array>
 		</dict>
 	</array>
