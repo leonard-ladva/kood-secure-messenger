@@ -146,11 +146,12 @@ class _ContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = context.read<AppBloc>().state.user;
     return ElevatedButton(
       onPressed: () {
-        context.read<AppLockSetupCubit>().setAppLockStatus(authEnabled);
+        context.read<AppLockSetupCubit>().setAppLockStatus(currentUser.id, authEnabled);
         context.read<OnboardingFlowCubit>().setStatus(
-              context.read<AppBloc>().state.user,
+              currentUser,
               OnboardingFlowStatus.completed,
             );
         context.flow<OnboardingFlowStatus>().complete(

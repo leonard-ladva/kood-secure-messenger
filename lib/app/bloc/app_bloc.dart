@@ -19,7 +19,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         _localStorageRepository = localStorageRepository,
         super(
           authenticationRepository.currentUser.isNotEmpty
-              ? localStorageRepository.isAppLockEnabled()
+              ? localStorageRepository
+                      .isAppLockEnabled(authenticationRepository.currentUser.id)
                   ? AppState.locked(authenticationRepository.currentUser)
                   : AppState.authenticated(authenticationRepository.currentUser)
               : const AppState.unauthenticated(),
@@ -40,7 +41,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) {
     emit(
       event.user.isNotEmpty
-          ? _localStorageRepository.isAppLockEnabled()
+          ? _localStorageRepository.isAppLockEnabled(event.user.id)
               ? AppState.locked(_authenticationRepository.currentUser)
               : AppState.authenticated(_authenticationRepository.currentUser)
           : AppState.unauthenticated(),

@@ -2,7 +2,9 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:messaging_repository/messaging_repository.dart';
 import 'package:relay/app/app.dart';
+import 'package:relay/chat_list/bloc/chat_list_bloc.dart';
 import 'package:relay/chat_list/chat_list.dart';
 import 'package:relay/helpers/helpers.dart';
 import 'package:relay/profile/profile.dart';
@@ -17,45 +19,50 @@ class ChatListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentUser = context.select((ProfileBloc bloc) => bloc.state.user);
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leadingWidth: 32,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _MyProfileButton(currentUser),
-            const SizedBox(width: 24),
-            Text(
-              'Relay',
-              style: TextStyle(
-                fontSize: 24,
+    return BlocProvider<ChatListBloc>(
+      create: (context) => ChatListBloc(
+        messagingRepository: context.read<MessagingRepository>(),
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leadingWidth: 32,
+          automaticallyImplyLeading: false,
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _MyProfileButton(currentUser),
+              const SizedBox(width: 24),
+              Text(
+                'Relay',
+                style: TextStyle(
+                  fontSize: 24,
+                ),
               ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                Navigator.of(context).push<void>(
+                  MaterialPageRoute(
+                    builder: (context) => UserSearchPage(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                context.read<AppBloc>().add(AppLogoutRequested());
+              },
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                MaterialPageRoute(
-                  builder: (context) => UserSearchPage(),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              context.read<AppBloc>().add(AppLogoutRequested());
-            },
-          ),
-        ],
+        body: ChatListView(),
       ),
-      body: ChatListView(),
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// {@template local_storage_repository}
@@ -30,12 +28,11 @@ class LocalStorageRepository {
     _userPreferencesBox = await Hive.openBox(userPrefrencesBoxName);
   }
 
-  void setAppLockEnabledStatus(bool status) {
-    _userPreferencesBox.put('isAppLockEnabled', status);
+  void setAppLockEnabledStatus(String userId, bool status) {
+    _userPreferencesBox.put('$userId-isAppLockEnabled', status);
   }
 
-  bool isAppLockEnabled() {
-    log('isAppLockEnabled: ${_userPreferencesBox.get('isAppLockEnabled')}');
-    return _userPreferencesBox.get('isAppLockEnabled', defaultValue: false);
+  bool isAppLockEnabled(String userId) {
+    return _userPreferencesBox.get('$userId-isAppLockEnabled', defaultValue: false);
   }
 }

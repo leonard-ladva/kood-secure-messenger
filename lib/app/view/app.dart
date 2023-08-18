@@ -66,11 +66,7 @@ class App extends StatelessWidget {
               databaseRepository: _databaseRepository,
             ),
           ),
-          BlocProvider<ChatListBloc>(
-            create: (context) => ChatListBloc(
-              messagingRepository: _messagingRepository,
-            ),
-          ),
+         
         ],
         child: AppView(),
       ),

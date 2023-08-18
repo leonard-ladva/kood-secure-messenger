@@ -15,22 +15,31 @@ class MessagingRepository {
   })  : _authenticationRepository = authenticationRepository,
         _firestore = firestore ?? FirebaseFirestore.instance,
         super() {
-    _rooms.onListen = () => _firestore
-        .collection('chats')
-        .where('memberIds',
-            arrayContains: _authenticationRepository.currentUser.id)
-        .snapshots()
-        .listen((snapshot) => _onNewRoomsDataReceived(snapshot));
+    _roomsStreamSetup();
   }
 
   final AuthenticationRepository _authenticationRepository;
   final DatabaseRepository _databaseRepository = DatabaseRepository();
   final FirebaseFirestore _firestore;
 
-  // late final StreamSubscription<QuerySnapshot> _chatRoomsSubscription;
-  Stream<List<ChatRoom>> get rooms => _rooms.stream;
-  final StreamController<List<ChatRoom>> _rooms =
+  Stream<List<ChatRoom>> get rooms => _roomsStreamController.stream;
+  final StreamController<List<ChatRoom>> _roomsStreamController =
       StreamController<List<ChatRoom>>.broadcast();
+  late StreamSubscription<QuerySnapshot> _firestoreChatsStream;
+
+  void _roomsStreamSetup() {
+    _roomsStreamController.onListen = () {
+      _firestoreChatsStream = _firestore
+          .collection('chats')
+          .where('memberIds',
+              arrayContains: _authenticationRepository.currentUser.id)
+          .snapshots()
+          .listen((snapshot) => _onNewRoomsDataReceived(snapshot));
+    };
+    _roomsStreamController.onCancel = () {
+      _firestoreChatsStream.cancel();
+    };
+  }
 
   String _otherUserId(List<String> memberIds, User currentUser) {
     return memberIds.firstWhere(
@@ -40,7 +49,8 @@ class MessagingRepository {
   }
 
   void _onNewRoomsDataReceived(QuerySnapshot snapshot) async {
-    if (_rooms.hasListener == false) return;
+    if (_roomsStreamController.isClosed) return;
+    if (_roomsStreamController.hasListener == false) return;
 
     try {
       final updatedRoomsFuture = snapshot.docs.map((doc) {
@@ -54,9 +64,9 @@ class MessagingRepository {
       }).toList();
 
       final updatedRooms = await Future.wait(updatedRoomsFuture);
-      _rooms.add(updatedRooms);
+      _roomsStreamController.add(updatedRooms);
     } catch (e) {
-      _rooms.addError(e);
+      _roomsStreamController.addError(e);
     }
   }
 

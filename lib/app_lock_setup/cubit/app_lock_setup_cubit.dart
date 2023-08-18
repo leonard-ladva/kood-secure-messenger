@@ -31,7 +31,7 @@ class AppLockSetupCubit extends Cubit<AppLockSetupState> {
     emit(state.copyWith(status: AppLockSetupStatus.success));
   }
 
-  void setAppLockStatus(bool status) {
-    _localStorageRepository.setAppLockEnabledStatus(status);
+  void setAppLockStatus(String userId, bool status) {
+    _localStorageRepository.setAppLockEnabledStatus(userId, status);
   }
 }
