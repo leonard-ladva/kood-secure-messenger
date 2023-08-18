@@ -12,8 +12,16 @@ class MakeRoomFailure implements Exception {
 }
 
 class GetRoomsFailure implements Exception {
-  /// {@macro get_user_profile_failure}
   const GetRoomsFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
+
+class RoomExistsFailure implements Exception {
+  const RoomExistsFailure([
     this.message = 'An unknown exception occurred.',
   ]);
 

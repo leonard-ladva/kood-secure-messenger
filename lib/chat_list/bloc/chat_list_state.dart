@@ -25,5 +25,5 @@ final class ChatListState extends Equatable {
   final List<ChatRoom>? rooms;
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [status, rooms];
 }

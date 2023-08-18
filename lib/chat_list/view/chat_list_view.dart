@@ -7,13 +7,16 @@ import 'package:relay/profile/bloc/profile_bloc.dart';
 class ChatListView extends StatelessWidget {
   const ChatListView({super.key});
 
-  User otherUser(List<User> members, User currentUser) {
-    return members.firstWhere((member) => member.id != currentUser.id);
+  String otherUser(List<String> memberIds, User currentUser) {
+    return memberIds.firstWhere(
+      (id) => id != currentUser.id,
+      orElse: () => currentUser.id,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final currenUser = context.read<ProfileBloc>().state.user;
+    final currentUser = context.read<ProfileBloc>().state.user;
     return BlocBuilder<ChatListBloc, ChatListState>(
       builder: (context, state) {
         if (state.status == ChatListStatus.chatsLoaded) {
@@ -23,9 +26,9 @@ class ChatListView extends StatelessWidget {
                 return ListTile(
                   title: Text(
                     otherUser(
-                      state.rooms![index].members,
-                      currenUser,
-                    ).name!,
+                      state.rooms![index].memberIds,
+                      currentUser,
+                    ),
                   ),
                 );
               });

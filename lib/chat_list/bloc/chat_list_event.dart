@@ -4,16 +4,7 @@ sealed class ChatListEvent extends Equatable {
   const ChatListEvent();
 
   @override
-  List<Object> get props => [];
-}
-
-final class MakeRoomRequested extends ChatListEvent {
-  const MakeRoomRequested(this.otherUser);
-
-  final User otherUser;
-
-  @override
-  List<Object> get props => [otherUser];
+  List<Object?> get props => [];
 }
 
 final class ChatListRequested extends ChatListEvent {
@@ -26,5 +17,5 @@ final class _RoomListUpdated extends ChatListEvent {
   final List<ChatRoom> chats;
 
   @override
-  List<Object> get props => [chats];
+  List<Object?> get props => [chats];
 }

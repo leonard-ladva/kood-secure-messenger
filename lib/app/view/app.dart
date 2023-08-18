@@ -1,4 +1,3 @@
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:flow_builder/flow_builder.dart';
@@ -46,6 +45,9 @@ class App extends StatelessWidget {
         RepositoryProvider<LocalStorageRepository>.value(
           value: _localStorageRepository,
         ),
+        RepositoryProvider<MessagingRepository>.value(
+          value: _messagingRepository,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -65,9 +67,10 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider<ChatListBloc>(
-              create: (context) => ChatListBloc(
-                    messagingRepository: _messagingRepository,
-                  )),
+            create: (context) => ChatListBloc(
+              messagingRepository: _messagingRepository,
+            ),
+          ),
         ],
         child: AppView(),
       ),

@@ -26,5 +26,5 @@ final class ProfileState extends Equatable {
   final String? errorMessage;
 
   @override
-  List<Object> get props => [status, user];
+  List<Object?> get props => [status, user, errorMessage];
 }

@@ -4,7 +4,7 @@ sealed class UserSearchEvent extends Equatable {
   const UserSearchEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class QueryChanged extends UserSearchEvent {
@@ -13,5 +13,5 @@ final class QueryChanged extends UserSearchEvent {
   final String query;
 
   @override
-  List<Object> get props => [query];
+  List<Object?> get props => [query];
 }

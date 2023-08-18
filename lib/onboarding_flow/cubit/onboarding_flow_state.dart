@@ -6,8 +6,6 @@ final class OnboardingFlowState extends Equatable {
   });
 
   final OnboardingFlowStatus status;
-  @override
-  List<Object> get props => [status];
 
   OnboardingFlowState copyWith({
     OnboardingFlowStatus? status,
@@ -16,4 +14,6 @@ final class OnboardingFlowState extends Equatable {
       status: status ?? this.status,
     );
   }
+  @override
+  List<Object> get props => [status];
 }

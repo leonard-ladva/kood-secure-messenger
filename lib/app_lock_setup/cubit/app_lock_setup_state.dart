@@ -14,8 +14,6 @@ class AppLockSetupState extends Equatable {
 
   final AppLockSetupStatus status;
 
-  @override
-  List<Object> get props => [status];
 
   AppLockSetupState copyWith({
     AppLockSetupStatus? status,
@@ -24,4 +22,7 @@ class AppLockSetupState extends Equatable {
       status: status ?? this.status,
     );
   }
+  
+  @override
+  List<Object?> get props => [status];
 }

@@ -78,8 +78,7 @@ class DatabaseRepository {
   Future<User> getUser(String uid) async {
     try {
       var doc = await _firestore.collection('users').doc(uid).get();
-      if (!doc.exists) return User.empty;
-      return User.fromJson(doc.data()!);
+      return doc.exists ? User.fromJson(doc.data()!) : User.empty;
     } catch (_) {
       throw GetUserProfileFailure();
     }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:relay/helpers/src/initials.dart';
@@ -25,8 +26,7 @@ class UserSearchView extends StatelessWidget {
         return ListTile(
           leading: CircleAvatar(
             foregroundImage:
-                user.photo == null ? null : NetworkImage(user.photo!),
-            // radius: 10,
+                user.photo == null ? null : CachedNetworkImageProvider(user.photo!),
             backgroundColor: Color(0xFFb8e986),
             child: Text(
               initials(

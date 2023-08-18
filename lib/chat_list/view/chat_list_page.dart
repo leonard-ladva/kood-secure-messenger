@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:relay/app/app.dart';
@@ -21,9 +22,8 @@ class ChatListPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         leadingWidth: 70,
         title: Text(
-          'Chats',
+          'Relay',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
             fontSize: 32,
           ),
         ),
@@ -40,7 +40,7 @@ class ChatListPage extends StatelessWidget {
             child: CircleAvatar(
               foregroundImage: currentUser.photo == null
                   ? null
-                  : NetworkImage(currentUser.photo!),
+                  : CachedNetworkImageProvider(currentUser.photo!),
               // radius: 10,
               backgroundColor: Color(0xFFb8e986),
               child: Text(

@@ -42,5 +42,5 @@ final class UserSearchState extends Equatable {
         );
 
   @override
-  List<Object> get props => [status, results];
+  List<Object?> get props => [status, results, errorMessage];
 }
