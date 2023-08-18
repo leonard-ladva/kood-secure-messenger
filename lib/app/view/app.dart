@@ -1,32 +1,34 @@
-import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
+import 'package:messaging_repository/messaging_repository.dart';
 import 'package:relay/app/app.dart';
-import 'package:relay/deep_links/cubit/deep_links_cubit.dart';
+import 'package:relay/chat_list/bloc/chat_list_bloc.dart';
+import 'package:relay/deep_links/deep_links.dart';
 import 'package:relay/profile/profile.dart';
 import 'package:relay/theme.dart';
 import 'package:storage_bucket_repository/storage_bucket_repository.dart';
-import 'package:uni_links/uni_links.dart';
 
 class App extends StatelessWidget {
   const App({
     required AuthenticationRepository authenticationRepository,
     required DatabaseRepository databaseRepository,
     required LocalStorageRepository localStorageRepository,
+    required MessagingRepository messagingRepository,
     super.key,
   })  : _authenticationRepository = authenticationRepository,
         _databaseRepository = databaseRepository,
-        _localStorageRepository = localStorageRepository;
+        _localStorageRepository = localStorageRepository,
+        _messagingRepository = messagingRepository;
 
   final AuthenticationRepository _authenticationRepository;
   final DatabaseRepository _databaseRepository;
   final LocalStorageRepository _localStorageRepository;
+  final MessagingRepository _messagingRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,10 @@ class App extends StatelessWidget {
               databaseRepository: _databaseRepository,
             ),
           ),
+          BlocProvider<ChatListBloc>(
+              create: (context) => ChatListBloc(
+                    messagingRepository: _messagingRepository,
+                  )),
         ],
         child: AppView(),
       ),

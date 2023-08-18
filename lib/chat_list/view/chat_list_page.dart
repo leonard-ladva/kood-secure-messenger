@@ -5,6 +5,7 @@ import 'package:relay/chat_list/chat_list.dart';
 import 'package:relay/helpers/helpers.dart';
 import 'package:relay/profile/profile.dart';
 import 'package:relay/profile_page/profile_page.dart';
+import 'package:relay/user_search/user_search.dart';
 
 class ChatListPage extends StatelessWidget {
   const ChatListPage({super.key});
@@ -56,6 +57,16 @@ class ChatListPage extends StatelessWidget {
           ),
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.of(context).push<void>(
+                MaterialPageRoute(
+                  builder: (context) => UserSearchPage(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {

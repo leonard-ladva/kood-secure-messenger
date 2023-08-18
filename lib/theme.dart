@@ -16,3 +16,11 @@ final theme = ThemeData(
 );
 
 final darkTheme = ThemeData.dark();
+// ThemeData(
+//   textTheme: GoogleFonts.openSansTextTheme(),
+//   scaffoldBackgroundColor: const Color(0xFF1d1c21),
+//   primaryColorDark: const Color(0x282b34),
+//   colorScheme: const ColorScheme.dark(
+//     secondary: Colors.teal,
+//   ),
+// );

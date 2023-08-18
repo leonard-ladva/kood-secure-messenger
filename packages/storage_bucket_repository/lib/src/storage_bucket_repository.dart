@@ -31,7 +31,12 @@ class StorageBucketRepository {
   Future<String> saveProfilePic(File file) async {
     try {
       //Create a reference to the location you want to upload to in firebase
-      Reference reference = _firebaseStorage.ref().child("profile_pictures");
+      final time = DateTime.now().millisecondsSinceEpoch.toString();
+      final fileName = '$time.${file.path.split('.').last}';
+
+      final reference =
+          await _firebaseStorage.ref().child("profile_pictures/$fileName");
+
       //Upload the file to firebase
       await reference.putFile(file);
       return await reference.getDownloadURL();

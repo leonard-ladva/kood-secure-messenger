@@ -1,10 +1,14 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user.g.dart';
 
 /// {@template user}
 /// User model
 ///
 /// [User.empty] represents an unauthenticated user.
 /// {@endtemplate}
+@JsonSerializable()
 class User extends Equatable {
   /// {@macro user}
   const User({
@@ -39,29 +43,9 @@ class User extends Equatable {
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != User.empty;
 
-  // /// Creates a new [User] instance from a json [Map].
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'] as String,
-      email: json['email'] as String?,
-      name: json['name'] as String?,
-      photo: json['photo'] as String?,
-      onboardingFlowStatus: json['onboardingFlowStatus'] == null
-          ? null
-          : OnboardingFlowStatus.fromJson(
-              json['onboardingFlowStatus'] as String),
-    );
-  }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'email': email,
-      'name': name,
-      'photo': photo,
-      'onboardingFlowStatus': onboardingFlowStatus?.toJson(),
-    };
-  }
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
   User copyWith({
     String? email,

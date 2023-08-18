@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
+import 'package:messaging_repository/messaging_repository.dart';
 import 'package:relay/app/app.dart';
 
 Future<void> main() async {
@@ -30,9 +31,12 @@ Future<void> main() async {
   final localStorageRepository = await LocalStorageRepository.create();
   final databaseRepository = DatabaseRepository();
 
+  final messagingRepository = MessagingRepository(authenticationRepository: authenticationRepository);
+
   runApp(App(
     authenticationRepository: authenticationRepository,
     databaseRepository: databaseRepository,
     localStorageRepository: localStorageRepository,
+    messagingRepository: messagingRepository,
   ));
 }

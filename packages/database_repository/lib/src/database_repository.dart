@@ -53,6 +53,15 @@ class UpdateUserOnboardingStatusFailure implements Exception {
   final String message;
 }
 
+class SearchUsersException implements Exception {
+  const SearchUsersException([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
+
 /// {@template database_repository}
 /// Repository which manages cloud data storage.
 /// {@endtemplate}
@@ -63,12 +72,6 @@ class DatabaseRepository {
   }) : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
-
-  // /// Whether or not the current environment is web
-  // /// Should only be overridden for testing purposes. Otherwise,
-  // /// defaults to [kIsWeb]
-  // @visibleForTesting
-  // bool isWeb = kIsWeb;
 
   /// Returns user data from firestore
   /// Returns empty user if user does not exist
@@ -109,6 +112,19 @@ class DatabaseRepository {
       return user;
     } catch (_) {
       throw UpdateUserProfileFailure();
+    }
+  }
+
+  Future<List<User>> searchUsers(String query) async {
+    try {
+      final users = await _firestore
+          .collection('users')
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThan: query + 'z')
+          .get();
+      return users.docs.map((doc) => User.fromJson(doc.data())).toList();
+    } catch (_) {
+      throw SearchUsersException();
     }
   }
 }

@@ -29,6 +29,8 @@ dependencies:
   local_auth: ^2.1.6
   local_storage_repository:
     path: packages/local_storage_repository
+  messaging_repository:
+    path: packages/messaging_repository
   meta: ^1.7.0
   qr_flutter: ^4.1.0
   storage_bucket_repository:
