@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:database_repository/database_repository.dart';
@@ -23,12 +21,6 @@ class MessagingRepository {
             arrayContains: _authenticationRepository.currentUser.id)
         .snapshots()
         .listen((snapshot) => _onNewRoomsDataReceived(snapshot));
-    // _firestore
-    //     .collection('chats')
-    //     .where('memberIds',
-    //         arrayContains: _authenticationRepository.currentUser.id)
-    //     .snapshots()
-    //     .listen((snapshot) => _onNewRoomsDataReceived(snapshot));
   }
 
   final AuthenticationRepository _authenticationRepository;
@@ -40,64 +32,51 @@ class MessagingRepository {
   final StreamController<List<ChatRoom>> _rooms =
       StreamController<List<ChatRoom>>.broadcast();
 
+  String _otherUserId(List<String> memberIds, User currentUser) {
+    return memberIds.firstWhere(
+      (id) => id != currentUser.id,
+      orElse: () => currentUser.id,
+    );
+  }
+
   void _onNewRoomsDataReceived(QuerySnapshot snapshot) async {
-    log("new rooms data received");
     if (_rooms.hasListener == false) return;
 
     try {
-      log(snapshot.docs.length.toString());
-      final updatedRooms = snapshot.docs.map((doc) {
+      final updatedRoomsFuture = snapshot.docs.map((doc) {
         final room = ChatRoom.fromJson(doc.data() as Map<String, dynamic>);
         return room;
+      }).map((room) async {
+        final otherUserId =
+            _otherUserId(room.memberIds, _authenticationRepository.currentUser);
+        final otherUser = await _databaseRepository.getUser(otherUserId);
+        return room.copyWith(otherUser: otherUser);
       }).toList();
-      log(updatedRooms.toString());
+
+      final updatedRooms = await Future.wait(updatedRoomsFuture);
       _rooms.add(updatedRooms);
     } catch (e) {
-      log('error');
       _rooms.addError(e);
     }
   }
 
-  Future<void> makeRoom(String contactId) async {
+  Future<void> makeRoom(String otherUserId) async {
     User currentUser = _authenticationRepository.currentUser;
-    User otherUser = User.empty;
-
-    if (currentUser.id != contactId) {
-      try {
-        currentUser = await _databaseRepository.getUser(currentUser.id);
-      } on GetUserProfileFailure catch (e) {
-        throw MakeRoomFailure(e.toString());
-      } catch (e) {
-        log('1');
-        throw MakeRoomFailure(e.toString());
-      }
-    }
-    try {
-      otherUser = await _databaseRepository.getUser(contactId);
-    } on GetUserProfileFailure catch (e) {
-      throw MakeRoomFailure(e.toString());
-    } catch (e) {
-      log('2');
-      throw MakeRoomFailure(e.toString());
-    }
 
     final room = ChatRoom(
-      id: _roomId(currentUser.id, otherUser.id),
-      // members: [currentUser, otherUser],
-      memberIds: [currentUser.id, otherUser.id],
+      id: _roomId(currentUser.id, otherUserId),
+      memberIds: [currentUser.id, otherUserId],
     );
 
     try {
       room.toJson();
     } catch (e) {
-      log('3');
       throw MakeRoomFailure(e.toString());
     }
 
     try {
       await _firestore.collection('chats').doc(room.id).set(room.toJson());
     } catch (e) {
-      log('make room error');
       throw MakeRoomFailure(e.toString());
     }
   }

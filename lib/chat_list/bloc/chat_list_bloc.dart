@@ -10,8 +10,7 @@ part 'chat_list_state.dart';
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   ChatListBloc({
     required MessagingRepository messagingRepository,
-  })  : _messagingRepository = messagingRepository,
-        super(ChatListState.initial()) {
+  }) : super(ChatListState.initial()) {
     on<_RoomListUpdated>(_onRoomListUpdated);
 
     _roomsSubscription = messagingRepository.rooms.listen(
@@ -19,7 +18,6 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     );
   }
   late final StreamSubscription<List<ChatRoom>> _roomsSubscription;
-  final MessagingRepository _messagingRepository;
 
   void _onRoomListUpdated(
       _RoomListUpdated event, Emitter<ChatListState> emit) async {
