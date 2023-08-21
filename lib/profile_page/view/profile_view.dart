@@ -41,7 +41,6 @@ class ProfileView extends StatelessWidget {
                 _EmailWidget(state.user),
                 const SizedBox(height: 16),
                 StartChatButton(userId: state.user.id),
-                // _ChatButton(state.user),
                 const SizedBox(height: 16),
                 QrImageView(
                   data:
@@ -104,19 +103,6 @@ class _EmailWidget extends StatelessWidget {
     return Text(
       user.email ?? '',
       style: TextStyle(fontSize: 20),
-    );
-  }
-}
-
-class _ChatButton extends StatelessWidget {
-  const _ChatButton(this.user);
-  final User user;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      child: Text('Chat'),
     );
   }
 }

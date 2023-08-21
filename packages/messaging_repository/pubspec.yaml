@@ -17,6 +17,9 @@ dependencies:
   flutter:
     sdk: flutter
   json_annotation: ^4.8.1
+  storage_bucket_repository:
+    path: ../storage_bucket_repository
+  mime: ^1.0.4
 
 dev_dependencies:
   build_runner: ^2.4.6

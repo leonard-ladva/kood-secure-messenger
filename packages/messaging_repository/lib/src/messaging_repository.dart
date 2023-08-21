@@ -3,6 +3,8 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:messaging_repository/messaging_repository.dart';
+import 'package:mime/mime.dart';
+import 'package:storage_bucket_repository/storage_bucket_repository.dart';
 
 /// {@template database_repository}
 /// Repository which manages cloud data storage.
@@ -20,6 +22,8 @@ class MessagingRepository {
 
   final AuthenticationRepository _authenticationRepository;
   final DatabaseRepository _databaseRepository = DatabaseRepository();
+  final StorageBucketRepository _storageBucketRepository =
+      StorageBucketRepository();
   final FirebaseFirestore _firestore;
 
   Stream<List<ChatRoom>> get rooms => _roomsStreamController.stream;
@@ -184,7 +188,32 @@ class MessagingRepository {
 
   Future<void> sendMessage(String roomId, ChatMessage message) async {
     try {
-      // Todo: handle files
+      if (message.file != null) {
+        final file = message.file!;
+
+        final imageRegex = RegExp(r'image');
+        final videoRegex = RegExp(r'video');
+
+        String? mimeStr = lookupMimeType(file.path);
+        final isImage = imageRegex.hasMatch(mimeStr ?? '');
+        final isVideo = videoRegex.hasMatch(mimeStr ?? '');
+        if (!isImage && !isVideo) {
+          throw SendMessageFailure('Invalid file type');
+        }
+
+        final fileType = isImage ? ChatMediaType.image : ChatMediaType.video;
+        final fileUrl =
+            await _storageBucketRepository.uploadMessageFile(roomId, file);
+
+        message = message.copyWith(
+          media: ChatMedia(
+            fileUrl: fileUrl,
+            type: fileType,
+          ),
+        );
+
+      }
+
       await _firestore
           .collection('chats')
           .doc(roomId)
@@ -210,10 +239,8 @@ class MessagingRepository {
     }
   }
 
-  Stream<bool> get typingStatus =>
-      _typingStatusStreamController.stream;
-  final _typingStatusStreamController =
-      StreamController<bool>.broadcast();
+  Stream<bool> get typingStatus => _typingStatusStreamController.stream;
+  final _typingStatusStreamController = StreamController<bool>.broadcast();
   late StreamSubscription<DocumentSnapshot> _firestoreRoomUpdateStream;
 
   void typingStatusStreamSetup(String roomId) {
@@ -239,8 +266,8 @@ class MessagingRepository {
         room.memberIds,
         _authenticationRepository.currentUser,
       );
-      final bool isOtherPersonTyping = room.isTyping[otherUserId] ?? false; 
-      
+      final bool isOtherPersonTyping = room.isTyping[otherUserId] ?? false;
+
       _typingStatusStreamController.add(isOtherPersonTyping);
     } catch (e) {
       _typingStatusStreamController.addError(e);

@@ -19,7 +19,6 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ChatMessagesBloc>(
       create: (context) => ChatMessagesBloc(
-        authenticationRepository: context.read<AuthenticationRepository>(),
         messagingRepository: context.read<MessagingRepository>(),
         room: room,
       ),

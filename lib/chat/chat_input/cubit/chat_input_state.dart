@@ -10,10 +10,12 @@ final class ChatInputState extends Equatable {
   const ChatInputState._({
     required this.status,
     required this.text,
+    this.file,
   });
 
   final ChatInputStatus status;
   final String text;
+  final File? file;
 
   const ChatInputState.initial()
       : this._(

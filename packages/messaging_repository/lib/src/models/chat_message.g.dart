@@ -10,7 +10,9 @@ ChatMessage _$ChatMessageFromJson(Map<String, dynamic> json) => ChatMessage(
       from: json['from'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       text: json['text'] as String,
-      fileUrl: json['fileUrl'] as String?,
+      media: json['media'] == null
+          ? null
+          : ChatMedia.fromJson(json['media'] as Map<String, dynamic>),
       isRead: json['isRead'] as bool? ?? false,
       isEdited: json['isEdited'] as bool? ?? false,
     );
@@ -28,7 +30,7 @@ Map<String, dynamic> _$ChatMessageToJson(ChatMessage instance) {
     }
   }
 
-  writeNotNull('fileUrl', instance.fileUrl);
+  writeNotNull('media', instance.media?.toJson());
   val['isRead'] = instance.isRead;
   val['isEdited'] = instance.isEdited;
   return val;

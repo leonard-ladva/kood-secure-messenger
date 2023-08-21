@@ -15,6 +15,15 @@ class SaveUserProfilePictureFailure implements Exception {
   final String message;
 }
 
+class UploadMessageFileFailure implements Exception {
+  const UploadMessageFileFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
+
 /// {@template database_repository}
 /// Repository which manages cloud data storage.
 /// {@endtemplate}
@@ -36,6 +45,23 @@ class StorageBucketRepository {
 
       final reference =
           await _firebaseStorage.ref().child("profile_pictures/$fileName");
+
+      //Upload the file to firebase
+      await reference.putFile(file);
+      return await reference.getDownloadURL();
+    } catch (_) {
+      throw SaveUserProfilePictureFailure();
+    }
+  }
+
+  Future<String> uploadMessageFile(String roomId, File file) async {
+  try {
+      //Create a reference to the location you want to upload to in firebase
+      final time = DateTime.now().millisecondsSinceEpoch.toString();
+      final fileName = '$time.${file.path.split('.').last}';
+
+      final reference =
+          await _firebaseStorage.ref().child("chats/$roomId/$fileName");
 
       //Upload the file to firebase
       await reference.putFile(file);

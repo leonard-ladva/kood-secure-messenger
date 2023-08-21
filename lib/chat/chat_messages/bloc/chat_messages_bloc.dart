@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:messaging_repository/messaging_repository.dart';
@@ -11,10 +10,8 @@ part 'chat_messages_state.dart';
 class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
   ChatMessagesBloc({
     required MessagingRepository messagingRepository,
-    required AuthenticationRepository authenticationRepository,
     required ChatRoom room,
   })  : _messagingRepository = messagingRepository,
-        _authenticationRepository = authenticationRepository,
         _room = room,
         super(ChatMessagesState.initial()) {
     on<LoadNextMessagesRequested>(_onLoadNextMessagesRequested);
@@ -29,7 +26,6 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
   }
   final ChatRoom _room;
   final MessagingRepository _messagingRepository;
-  final AuthenticationRepository _authenticationRepository;
 
   void _onLoadNextMessagesRequested(
     LoadNextMessagesRequested event,

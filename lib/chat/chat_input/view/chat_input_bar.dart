@@ -13,7 +13,6 @@ class ChatInputBar extends StatelessWidget {
     return BlocConsumer<ChatInputCubit, ChatInputState>(
       listener: (context, state) {
         if (state.status == ChatInputStatus.initial) {
-          // empty the text field
           textController.clear();
         }
       },
@@ -91,7 +90,9 @@ class _ImageButton extends StatelessWidget {
         color: Colors.red,
       ),
       child: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          context.read<ChatInputCubit>().pickImageClicked();
+        },
         icon: Icon(
           Icons.add,
         ),

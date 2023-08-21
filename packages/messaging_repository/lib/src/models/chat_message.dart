@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:messaging_repository/src/models/chat_media.dart';
 
 part 'chat_message.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ChatMessage {
   const ChatMessage({
     this.id,
@@ -12,7 +13,7 @@ class ChatMessage {
     required this.createdAt,
     required this.text,
     this.file,
-    this.fileUrl,
+    this.media,
     this.isRead = false,
     this.isEdited = false,
   });
@@ -25,8 +26,9 @@ class ChatMessage {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   final File? file;
+
   @JsonKey(includeIfNull: false)
-  final String? fileUrl;
+  final ChatMedia? media;
 
   final bool isRead;
   final bool isEdited;
@@ -41,7 +43,7 @@ class ChatMessage {
     DateTime? createdAt,
     String? text,
     File? file,
-    String? fileUrl,
+    ChatMedia? media,
     bool? isRead,
     bool? isEdited,
   }) {
@@ -51,7 +53,7 @@ class ChatMessage {
       createdAt: createdAt ?? this.createdAt,
       text: text ?? this.text,
       file: file ?? this.file,
-      fileUrl: fileUrl ?? this.fileUrl,
+      media: media ?? this.media,
       isRead: isRead ?? this.isRead,
       isEdited: isEdited ?? this.isEdited,
     );
