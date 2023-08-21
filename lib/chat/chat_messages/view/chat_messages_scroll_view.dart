@@ -5,35 +5,8 @@ import 'package:messaging_repository/messaging_repository.dart';
 import 'package:relay/app/app.dart';
 import 'package:relay/chat/chat.dart';
 
-class ChatView extends StatelessWidget {
-  const ChatView(this.room, {super.key});
-  final ChatRoom room;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ChatMessagesBloc, ChatMessagesState>(
-      builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: Column(
-            children: [
-              Expanded(
-                child: _MessagesView(room),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              ChatInput(room),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _MessagesView extends StatelessWidget {
-  const _MessagesView(this.room);
+class ChatMessagesScrollView extends StatelessWidget {
+  const ChatMessagesScrollView(this.room);
   final ChatRoom room;
 
   @override

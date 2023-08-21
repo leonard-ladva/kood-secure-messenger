@@ -22,7 +22,7 @@ class ChatPage extends StatelessWidget {
         authenticationRepository: context.read<AuthenticationRepository>(),
         messagingRepository: context.read<MessagingRepository>(),
         room: room,
-      ), //..add(LoadNextMessagesRequested(room)),
+      ), 
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -41,7 +41,20 @@ class ChatPage extends StatelessWidget {
             ],
           ),
         ),
-        body: ChatView(room),
+        body: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: Column(
+        children: [
+          Expanded(
+            child: ChatMessagesScrollView(room),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          ChatInput(room),
+        ],
+      ),
+    ),
       ),
     );
   }
