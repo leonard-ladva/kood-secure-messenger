@@ -28,3 +28,21 @@ class RoomExistsFailure implements Exception {
   /// The associated error message.
   final String message;
 }
+
+class GetRoomFailure implements Exception {
+  const GetRoomFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
+
+class SetMessageAsReadFailure implements Exception {
+  const SetMessageAsReadFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}

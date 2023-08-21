@@ -70,6 +70,20 @@ class MessagingRepository {
     }
   }
 
+  Future<ChatRoom> getRoom(String otherUserId) async {
+    User currentUser = _authenticationRepository.currentUser;
+
+    final roomId = _roomId(currentUser.id, otherUserId);
+    try {
+      final doc = await _firestore.collection('chats').doc(roomId).get();
+      final room = ChatRoom.fromJson(doc.data() as Map<String, dynamic>);
+      final otherUser = await _databaseRepository.getUser(otherUserId);
+      return room.copyWith(otherUser: otherUser);
+    } catch (e) {
+      throw GetRoomFailure(e.toString());
+    }
+  }
+
   Future<void> makeRoom(String otherUserId) async {
     User currentUser = _authenticationRepository.currentUser;
 
@@ -108,5 +122,88 @@ class MessagingRepository {
     ids.sort();
     final roomId = ids.join('-');
     return roomId;
+  }
+
+  Stream<List<ChatMessage>> get messages => _messagesStreamController.stream;
+  final _messagesStreamController =
+      StreamController<List<ChatMessage>>.broadcast();
+  late StreamSubscription<QuerySnapshot> _firestoreMessagesStream;
+
+  void chatMessagesStreamSetup(String roomId) {
+    _messagesStreamController.onListen = () {
+      _firestoreMessagesStream = _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('messages')
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .listen((snapshot) => _onNewMessagesDataReceived(snapshot));
+    };
+    _messagesStreamController.onCancel = () {
+      _firestoreMessagesStream.cancel();
+    };
+  }
+
+  void _onNewMessagesDataReceived(QuerySnapshot snapshot) async {
+    if (_messagesStreamController.isClosed) return;
+    if (_messagesStreamController.hasListener == false) return;
+
+    try {
+      final updatedMessages = snapshot.docs.map((doc) {
+        final message =
+            ChatMessage.fromJson(doc.data() as Map<String, dynamic>);
+        return message.copyWith(id: doc.id);
+      }).toList();
+
+      _messagesStreamController.add(updatedMessages);
+    } catch (e) {
+      _messagesStreamController.addError(e);
+    }
+  }
+
+  Future<List<ChatMessage>> getChatMessages(String roomId, int offset) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('messages')
+          .orderBy('createdAt', descending: true)
+          .limit(50)
+          .get();
+      return querySnapshot.docs.map((doc) {
+        final message = ChatMessage.fromJson(doc.data());
+        return message.copyWith(id: doc.id);
+      }).toList();
+    } catch (e) {
+      throw GetChatMessagesFailure(e.toString());
+    }
+  }
+
+  Future<void> sendMessage(String roomId, ChatMessage message) async {
+    try {
+      // Todo: handle files
+      await _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('messages')
+          .add(message.toJson());
+    } catch (e) {
+      throw SendMessageFailure(e.toString());
+    }
+  }
+
+  Future<void> setMessageAsRead(String roomId, String messageId) async {
+    try {
+      await _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('messages')
+          .doc(messageId)
+          .update({
+        'isRead': true,
+      });
+    } catch (e) {
+      throw SetMessageAsReadFailure(e.toString());
+    }
   }
 }
