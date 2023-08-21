@@ -9,22 +9,26 @@ class ChatRoom {
     required this.id,
     this.otherUser,
     required this.memberIds,
+    required this.isTyping,
   });
 
   final String id;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final User? otherUser;
   final List<String> memberIds;
+  final Map<String, bool> isTyping;
 
   ChatRoom copyWith({
     String? id,
     User? otherUser,
     List<String>? memberIds,
+    Map<String, bool>? isTyping,
   }) {
     return ChatRoom(
       id: id ?? this.id,
       otherUser: otherUser ?? this.otherUser,
       memberIds: memberIds ?? this.memberIds,
+      isTyping: isTyping ?? this.isTyping,
     );
   }
 

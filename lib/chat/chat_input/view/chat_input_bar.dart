@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messaging_repository/messaging_repository.dart';
 import 'package:relay/chat/chat_input/cubit/chat_input_cubit.dart';
 
 class ChatInputBar extends StatelessWidget {
-  ChatInputBar(
-    this.room, {
+  ChatInputBar({
     Key? key,
   }) : super(key: key);
-  final ChatRoom room;
+  // final ChatRoom room;
   final textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -54,7 +52,7 @@ class ChatInputBar extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              if (state.text.isEmpty) _ImageButton() else _SendButton(room),
+              if (state.text.isEmpty) _ImageButton() else _SendButton(),
             ],
           ),
         );
@@ -64,8 +62,7 @@ class ChatInputBar extends StatelessWidget {
 }
 
 class _SendButton extends StatelessWidget {
-  const _SendButton(this.room);
-  final ChatRoom room;
+  const _SendButton();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,7 +71,7 @@ class _SendButton extends StatelessWidget {
         color: Colors.red,
       ),
       child: IconButton(
-        onPressed: () => context.read<ChatInputCubit>().sendMessage(room),
+        onPressed: () => context.read<ChatInputCubit>().sendMessage(),
         icon: Icon(
           Icons.send,
         ),

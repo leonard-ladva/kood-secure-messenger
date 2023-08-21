@@ -87,10 +87,13 @@ class MessagingRepository {
   Future<void> makeRoom(String otherUserId) async {
     User currentUser = _authenticationRepository.currentUser;
 
-    final room = ChatRoom(
-      id: _roomId(currentUser.id, otherUserId),
-      memberIds: [currentUser.id, otherUserId],
-    );
+    final room = ChatRoom(id: _roomId(currentUser.id, otherUserId), memberIds: [
+      currentUser.id,
+      otherUserId
+    ], isTyping: {
+      currentUser.id: false,
+      otherUserId: false,
+    });
 
     try {
       room.toJson();
@@ -204,6 +207,55 @@ class MessagingRepository {
       });
     } catch (e) {
       throw SetMessageAsReadFailure(e.toString());
+    }
+  }
+
+  Stream<bool> get typingStatus =>
+      _typingStatusStreamController.stream;
+  final _typingStatusStreamController =
+      StreamController<bool>.broadcast();
+  late StreamSubscription<DocumentSnapshot> _firestoreRoomUpdateStream;
+
+  void typingStatusStreamSetup(String roomId) {
+    _typingStatusStreamController.onListen = () {
+      _firestoreRoomUpdateStream = _firestore
+          .collection('chats')
+          .doc(roomId)
+          .snapshots()
+          .listen((snapshot) => _onNewTypingStatusReceived(snapshot));
+    };
+    _typingStatusStreamController.onCancel = () {
+      _firestoreRoomUpdateStream.cancel();
+    };
+  }
+
+  void _onNewTypingStatusReceived(DocumentSnapshot snapshot) async {
+    if (_typingStatusStreamController.isClosed) return;
+    if (_typingStatusStreamController.hasListener == false) return;
+
+    try {
+      final room = ChatRoom.fromJson(snapshot.data() as Map<String, dynamic>);
+      final otherUserId = _otherUserId(
+        room.memberIds,
+        _authenticationRepository.currentUser,
+      );
+      final bool isOtherPersonTyping = room.isTyping[otherUserId] ?? false; 
+      
+      _typingStatusStreamController.add(isOtherPersonTyping);
+    } catch (e) {
+      _typingStatusStreamController.addError(e);
+    }
+  }
+
+  Future<void> setTypingStatus(String roomId, bool isTyping) async {
+    User currentUser = _authenticationRepository.currentUser;
+
+    try {
+      await _firestore.collection('chats').doc(roomId).update({
+        'isTyping.${currentUser.id}': isTyping,
+      });
+    } catch (e) {
+      throw SetTypingStatusFailure(e.toString());
     }
   }
 }

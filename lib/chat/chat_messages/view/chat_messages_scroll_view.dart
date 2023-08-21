@@ -17,10 +17,11 @@ class ChatMessagesScrollView extends StatelessWidget {
         return CustomScrollView(
           reverse: true,
           slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate.fixed([
-                const SizedBox(height: 8),
-              ]),
+            SliverToBoxAdapter(
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: TypingIndicator(room),
+              ),
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -156,7 +157,6 @@ class _MyMessage extends StatelessWidget {
   final bool isNextSameUser;
   final bool isPreviousSameUser;
   final ChatRoom room;
-
 
   static const largeRadius = Radius.circular(16);
   static const smallRadius = Radius.circular(4);

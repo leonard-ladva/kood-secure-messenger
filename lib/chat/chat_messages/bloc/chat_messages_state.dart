@@ -17,7 +17,7 @@ final class ChatMessagesState extends Equatable {
   final List<ChatMessage> messages;
   final String? errorMessage;
 
-   ChatMessagesState.initial()
+  ChatMessagesState.initial()
       : this._(
           status: ChatMessagesStatus.initial,
           messages: [],
@@ -31,7 +31,7 @@ final class ChatMessagesState extends Equatable {
       : this._(
           status: ChatMessagesStatus.failure,
           errorMessage: errorMessage,
-          messages: [], 
+          messages: [],
         );
 
   ChatMessagesState copyWith({

@@ -14,8 +14,9 @@ class ChatInput extends StatelessWidget {
       create: (context) => ChatInputCubit(
         authenticationRepository: context.read<AuthenticationRepository>(),
         messagingRepository: context.read<MessagingRepository>(),
+        room: room,
       ),
-      child: ChatInputBar(room),
+      child: ChatInputBar(),
     );
   }
 }

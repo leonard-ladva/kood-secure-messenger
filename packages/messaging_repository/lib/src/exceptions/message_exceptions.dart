@@ -15,3 +15,12 @@ class SendMessageFailure implements Exception {
   /// The associated error message.
   final String message;
 }
+
+class SetTypingStatusFailure implements Exception {
+  const SetTypingStatusFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
