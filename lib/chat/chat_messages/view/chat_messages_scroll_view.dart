@@ -43,8 +43,6 @@ class ChatMessagesScrollView extends StatelessWidget {
 
                   final isSameDayAsPrevious = DateUtils.isSameDay(
                       previousMessage?.createdAt, message.createdAt);
-                  // final isSameDayAsNext = DateUtils.isSameDay(
-                  //     nextMessage?.createdAt, message.createdAt);
                   List<Widget> children = [];
 
                   if (!isSameDayAsPrevious) {
@@ -95,8 +93,6 @@ class _MediaContent extends StatelessWidget {
   final ChatRoom room;
   final bool isFromMe;
 
-  static const largeRadius = Radius.circular(16);
-  static const smallRadius = Radius.circular(4);
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
@@ -104,12 +100,15 @@ class _MediaContent extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerRight,
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            bottomLeft: Radius.circular(16),
-            topRight: isPreviousSameUser ? smallRadius : largeRadius,
-            bottomRight: isNextSameUser ? smallRadius : largeRadius,
-          ),
+          borderRadius: isFromMe
+              ? _MyMessageBorderRadius(
+                  isPreviousSameUser,
+                  isNextSameUser,
+                )
+              : _OtherPersonMessageBorderRadius(
+                  isPreviousSameUser,
+                  isNextSameUser,
+                ),
           child: Stack(
             alignment: Alignment.bottomRight,
             children: [
@@ -180,12 +179,6 @@ class _VideoContentState extends State<_VideoContent> {
     return _videoController.value.isInitialized
         ? Stack(
             children: [
-              if (!_videoController.value.isPlaying)
-                Icon(
-                  Icons.play_arrow,
-                  size: 100,
-                  color: Colors.white,
-                ),
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -199,6 +192,15 @@ class _VideoContentState extends State<_VideoContent> {
                   child: VideoPlayer(_videoController),
                 ),
               ),
+              if (!_videoController.value.isPlaying)
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Icon(
+                    Icons.play_arrow,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
             ],
           )
         : Container();
@@ -267,15 +269,29 @@ class _TextContent extends StatelessWidget {
   }
 }
 
+BorderRadius _MyMessageBorderRadius(bool isPreviousSameUser, isNextSameUser) {
+  return BorderRadius.only(
+    topLeft: largeRadius,
+    bottomLeft: largeRadius,
+    topRight: isPreviousSameUser ? smallRadius : largeRadius,
+    bottomRight: isNextSameUser ? smallRadius : largeRadius,
+  );
+}
+
 BoxDecoration _MyMessageDecoration(bool isPreviousSameUser, isNextSameUser) {
   return BoxDecoration(
     color: Colors.red,
-    borderRadius: BorderRadius.only(
-      topLeft: largeRadius,
-      bottomLeft: largeRadius,
-      topRight: isPreviousSameUser ? smallRadius : largeRadius,
-      bottomRight: isNextSameUser ? smallRadius : largeRadius,
-    ),
+    borderRadius: _MyMessageBorderRadius(isPreviousSameUser, isNextSameUser),
+  );
+}
+
+BorderRadius _OtherPersonMessageBorderRadius(
+    bool isPreviousSameUser, isNextSameUser) {
+  return BorderRadius.only(
+    topRight: largeRadius,
+    bottomRight: largeRadius,
+    topLeft: isPreviousSameUser ? smallRadius : largeRadius,
+    bottomLeft: isNextSameUser ? smallRadius : largeRadius,
   );
 }
 
@@ -283,12 +299,8 @@ BoxDecoration _OtherPersonMessageDecoration(
     bool isPreviousSameUser, isNextSameUser) {
   return BoxDecoration(
     color: Colors.grey[700],
-    borderRadius: BorderRadius.only(
-      topRight: largeRadius,
-      bottomRight: largeRadius,
-      topLeft: isPreviousSameUser ? smallRadius : largeRadius,
-      bottomLeft: isNextSameUser ? smallRadius : largeRadius,
-    ),
+    borderRadius:
+        _OtherPersonMessageBorderRadius(isPreviousSameUser, isNextSameUser),
   );
 }
 
