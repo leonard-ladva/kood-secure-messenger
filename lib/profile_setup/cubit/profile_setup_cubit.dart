@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cryptography/cryptography.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
@@ -89,6 +91,12 @@ class ProfileSetupCubit extends Cubit<ProfileSetupState> {
         emit(state.copyWith(status: FormzSubmissionStatus.failure));
       }
     }
+
+    final keyAlgorithm = X25519();
+    final userKeyPair = await keyAlgorithm.newKeyPair();
+    final userPublicKey = await userKeyPair.extractPublicKey();
+    final userPublicKeyString = base64Encode(userPublicKey.bytes);
+
     try {
       await _databaseRepository.saveUser(
         User(
@@ -96,6 +104,7 @@ class ProfileSetupCubit extends Cubit<ProfileSetupState> {
           name: state.name.value.trim(),
           photo: photoUrl,
           email: currentUser.email,
+          publicKey: userPublicKeyString,
         ),
       );
       emit(state.copyWith(status: FormzSubmissionStatus.success));

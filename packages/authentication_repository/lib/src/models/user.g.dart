@@ -13,6 +13,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       photo: json['photo'] as String?,
       onboardingFlowStatus: $enumDecodeNullable(
           _$OnboardingFlowStatusEnumMap, json['onboardingFlowStatus']),
+      publicKey: json['publicKey'] as String?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -21,6 +22,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'name': instance.name,
       'photo': instance.photo,
       'onboardingFlowStatus': instance.onboardingFlowStatus,
+      'publicKey': instance.publicKey,
     };
 
 const _$OnboardingFlowStatusEnumMap = {

@@ -17,6 +17,7 @@ class User extends Equatable {
     this.name,
     this.photo,
     this.onboardingFlowStatus,
+    this.publicKey,
   });
 
   /// The current user's email address.
@@ -34,6 +35,8 @@ class User extends Equatable {
   ///
   final OnboardingFlowStatus? onboardingFlowStatus;
 
+  final String? publicKey;
+
   /// Empty user which represents an unauthenticated user.
   static const empty = User(id: '');
 
@@ -42,7 +45,6 @@ class User extends Equatable {
 
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != User.empty;
-
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
@@ -53,6 +55,7 @@ class User extends Equatable {
     String? name,
     String? photo,
     OnboardingFlowStatus? onboardingFlowStatus,
+    String? publicKey,
   }) {
     return User(
       email: email ?? this.email,
@@ -60,11 +63,12 @@ class User extends Equatable {
       name: name ?? this.name,
       photo: photo ?? this.photo,
       onboardingFlowStatus: onboardingFlowStatus ?? this.onboardingFlowStatus,
+      publicKey: publicKey ?? this.publicKey,
     );
   }
 
   @override
-  List<Object?> get props => [email, id, name, photo, onboardingFlowStatus];
+  List<Object?> get props => [email, id, name, photo, onboardingFlowStatus, publicKey];
 }
 
 enum OnboardingFlowStatus {
