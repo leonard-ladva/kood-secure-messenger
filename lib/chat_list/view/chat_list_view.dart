@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:relay/chat/chat.dart';
 import 'package:relay/chat_list/bloc/chat_list_bloc.dart';
 import 'package:relay/helpers/src/initials.dart';
 
@@ -17,43 +18,46 @@ class ChatListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final currentUser = context.read<ProfileBloc>().state.user;
     return BlocBuilder<ChatListBloc, ChatListState>(
       builder: (context, state) {
         if (state.status == ChatListStatus.chatsLoaded) {
           return ListView.separated(
-              itemCount: state.rooms!.length,
-              separatorBuilder: (context, index) => SizedBox(
-                    height: 20,
-                  ),
-              itemBuilder: (context, index) {
-                final room = state.rooms![index];
-                return ListTile(
-                  minVerticalPadding: 20,
-                  titleAlignment: ListTileTitleAlignment.top,
-                  leading: CircleAvatar(
-                    radius: 24,
-                    foregroundImage: room.otherUser?.photo == null
-                        ? null
-                        : CachedNetworkImageProvider(room.otherUser!.photo!),
-                    backgroundColor: Color(0xFFb8e986),
-                    child: Text(
-                      initials(
-                        room.otherUser?.name ?? '',
-                      ),
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF528617),
-                      ),
+            itemCount: state.rooms!.length,
+            separatorBuilder: (context, index) => SizedBox(
+              height: 20,
+            ),
+            itemBuilder: (context, index) {
+              final room = state.rooms![index];
+              return ListTile(
+                onTap: () {
+                  Navigator.of(context).push(ChatPage.route(room));
+                },
+                minVerticalPadding: 20,
+                titleAlignment: ListTileTitleAlignment.top,
+                leading: CircleAvatar(
+                  radius: 24,
+                  foregroundImage: room.otherUser?.photo == null
+                      ? null
+                      : CachedNetworkImageProvider(room.otherUser!.photo!),
+                  backgroundColor: Color(0xFFb8e986),
+                  child: Text(
+                    initials(
+                      room.otherUser?.name ?? '',
+                    ),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF528617),
                     ),
                   ),
-                  title: Text(
-                    room.otherUser?.name ?? '',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                );
-              });
+                ),
+                title: Text(
+                  room.otherUser?.name ?? '',
+                  style: TextStyle(fontSize: 18),
+                ),
+              );
+            },
+          );
         }
         return Container(child: Text('hello'));
       },

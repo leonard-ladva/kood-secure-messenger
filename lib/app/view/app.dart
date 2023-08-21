@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:messaging_repository/messaging_repository.dart';
 import 'package:relay/app/app.dart';
-import 'package:relay/chat_list/bloc/chat_list_bloc.dart';
 import 'package:relay/deep_links/deep_links.dart';
 import 'package:relay/profile/profile.dart';
 import 'package:relay/theme.dart';

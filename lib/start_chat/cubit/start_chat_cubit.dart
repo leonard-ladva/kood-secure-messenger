@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:messaging_repository/messaging_repository.dart';
@@ -17,24 +15,24 @@ class StartChatCubit extends Cubit<StartChatState> {
   void onStartChatRequested(String userId) async {
     emit(StartChatState.loading());
     try {
-      log("start");
       final roomExists = await _messagingRepository.roomExists(userId);
-      log("room exists: $roomExists");
       if (roomExists) {
-        emit(StartChatState.success());
+        final room = await _messagingRepository.getRoom(userId);
+        emit(StartChatState.success(room));
+        return;
       }
 
-      log("room exists: $roomExists");
       await _messagingRepository.makeRoom(userId);
-      emit(StartChatState.success());
+      final room = await _messagingRepository.getRoom(userId);
+      emit(StartChatState.success(room));
+
     } on RoomExistsFailure catch (e) {
-      log("error: ${e.message}");
       emit(StartChatState.failure(e.message));
     } on MakeRoomFailure catch (e) {
-      log("error: ${e.message}");
+      emit(StartChatState.failure(e.message));
+    } on GetRoomFailure catch (e) {
       emit(StartChatState.failure(e.message));
     } catch (e) {
-      log("error: ${e.toString()}");
       emit(StartChatState.failure(e.toString()));
     }
   }

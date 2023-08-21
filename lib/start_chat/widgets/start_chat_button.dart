@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:relay/chat/view/view.dart';
 import 'package:relay/start_chat/start_chat.dart';
 
 class StartChatButton extends StatelessWidget {
@@ -14,8 +15,7 @@ class StartChatButton extends StatelessWidget {
     return BlocConsumer<StartChatCubit, StartChatState>(
       listener: (context, state) {
         if (state.status == StartChatStatus.success) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("success")));
+          Navigator.of(context).pushReplacement(ChatPage.route(state.room!));
         }
         if (state.status == StartChatStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(

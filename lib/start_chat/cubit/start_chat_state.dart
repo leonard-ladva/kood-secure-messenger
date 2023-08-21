@@ -11,14 +11,20 @@ final class StartChatState extends Equatable {
   const StartChatState._({
     required this.status,
     this.errorMessage,
+    this.room,
   });
 
   final StartChatStatus status;
   final String? errorMessage;
+  final ChatRoom? room;
 
   const StartChatState.initial() : this._(status: StartChatStatus.initial);
   const StartChatState.loading() : this._(status: StartChatStatus.loading);
-  const StartChatState.success() : this._(status: StartChatStatus.success);
+  const StartChatState.success(ChatRoom room)
+      : this._(
+          status: StartChatStatus.success,
+          room: room,
+        );
   const StartChatState.failure(String errorMessage)
       : this._(
           status: StartChatStatus.failure,
