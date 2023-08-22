@@ -18,6 +18,7 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
     on<_MessageReceived>(_onMessageReceived);
     on<MessageSeen>(_onMessageSeen);
     on<_MessageListUpdated>(_onMessageListUpdated);
+    on<DeleteMessage>(_onDeleteMessage);
 
     _messagingRepository.chatMessagesStreamSetup(room.id);
     _messsageSubscription = _messagingRepository.messages.listen(
@@ -69,6 +70,20 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
         event.message.id ?? '',
       );
     } on SetMessageAsReadFailure catch (e) {
+      emit(ChatMessagesState.failure(e.message));
+    } catch (_) {
+      emit(ChatMessagesState.failure('An unknown error occured'));
+    }
+  }
+
+  void _onDeleteMessage(
+    DeleteMessage event,
+    Emitter<ChatMessagesState> emit,
+  ) async {
+    try {
+      await _messagingRepository.deleteMessage(
+          _room.id, event.message.id ?? '');
+    } on DeleteMessageFailure catch (e) {
       emit(ChatMessagesState.failure(e.message));
     } catch (_) {
       emit(ChatMessagesState.failure('An unknown error occured'));

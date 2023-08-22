@@ -224,6 +224,32 @@ class MessagingRepository {
     }
   }
 
+  Future<void> deleteMessage(String roomId, String messageId) async {
+    try {
+      await _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('messages')
+          .doc(messageId)
+          .delete();
+    } catch (e) {
+      throw DeleteMessageFailure(e.toString());
+    }
+  }
+
+  Future<void> updateMessage(String roomId, ChatMessage message) async {
+    try {
+      await _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('messages')
+          .doc(message.id)
+          .update(message.toJson());
+    } catch (e) {
+      throw UpdateMessageFailure(e.toString());
+    }
+  }
+
   Future<void> setMessageAsRead(String roomId, String messageId) async {
     try {
       await _firestore
@@ -323,8 +349,9 @@ class MessagingRepository {
       _encryptedMessagesStreamController.addError(e);
     }
   }
- 
-  Future<void> sendEncryptedMessage(String roomId, EncryptedMessage message) async {
+
+  Future<void> sendEncryptedMessage(
+      String roomId, EncryptedMessage message) async {
     try {
       await _firestore
           .collection('chats')
@@ -336,7 +363,8 @@ class MessagingRepository {
     }
   }
 
-  Future<void> setEncryptedMessageAsRead(String roomId, String messageId) async {
+  Future<void> setEncryptedMessageAsRead(
+      String roomId, String messageId) async {
     try {
       await _firestore
           .collection('chats')

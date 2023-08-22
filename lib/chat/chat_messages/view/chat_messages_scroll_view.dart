@@ -235,34 +235,61 @@ class _TextContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      child: Text.rich(
-        TextSpan(
-          text: message.text,
-          style: TextStyle(
-            fontSize: 16,
-          ),
-          children: [
-            TextSpan(text: '  '),
-            TextSpan(
-              text: DateFormat('Hm').format(message.createdAt),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[300],
+    return GestureDetector(
+      onLongPress: () async {
+        if (!isFromMe) return;
+        final bool result = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Delete message?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('Cancel'),
               ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('Delete'),
+              ),
+            ],
+          ),
+        );
+        if (result != true) return;
+        context.read<ChatMessagesBloc>().add(DeleteMessage(message));
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: Text.rich(
+          TextSpan(
+            text: message.text,
+            style: TextStyle(
+              fontSize: 16,
             ),
-            if (isFromMe) TextSpan(text: '  '),
-            if (isFromMe)
-              WidgetSpan(
-                child: Icon(
-                  message.isRead
-                      ? Icons.check_circle_sharp
-                      : Icons.check_circle_outline_sharp,
-                  size: 18,
+            children: [
+              TextSpan(text: '  '),
+              TextSpan(
+                text: DateFormat('Hm').format(message.createdAt),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[300],
                 ),
               ),
-          ],
+              if (isFromMe) TextSpan(text: '  '),
+              if (isFromMe)
+                WidgetSpan(
+                  child: Icon(
+                    message.isRead
+                        ? Icons.check_circle_sharp
+                        : Icons.check_circle_outline_sharp,
+                    size: 18,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

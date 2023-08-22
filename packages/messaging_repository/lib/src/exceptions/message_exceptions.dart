@@ -24,3 +24,21 @@ class SetTypingStatusFailure implements Exception {
   /// The associated error message.
   final String message;
 }
+
+class DeleteMessageFailure implements Exception {
+  const DeleteMessageFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}
+
+class UpdateMessageFailure implements Exception {
+  const UpdateMessageFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// The associated error message.
+  final String message;
+}

@@ -47,3 +47,12 @@ final class _MessageListUpdated extends ChatMessagesEvent {
   @override
   List<Object> get props => [messages];
 }
+
+final class DeleteMessage extends ChatMessagesEvent {
+  const DeleteMessage(this.message);
+
+  final ChatMessage message;
+
+  @override
+  List<Object> get props => [message];
+}
