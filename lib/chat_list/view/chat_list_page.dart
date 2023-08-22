@@ -1,7 +1,10 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cryptography_repository/cryptography_repository.dart';
+import 'package:database_repository/database_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:messaging_repository/messaging_repository.dart';
 import 'package:relay/app/app.dart';
 import 'package:relay/chat_list/bloc/chat_list_bloc.dart';
@@ -22,6 +25,10 @@ class ChatListPage extends StatelessWidget {
     return BlocProvider<ChatListBloc>(
       create: (context) => ChatListBloc(
         messagingRepository: context.read<MessagingRepository>(),
+        localStorageRepository: context.read<LocalStorageRepository>(),
+        authenticationRepository: context.read<AuthenticationRepository>(),
+        databaseRepository: context.read<DatabaseRepository>(),
+        cryptographyRepository: context.read<CryptographyRepository>(),
       ),
       child: Scaffold(
         appBar: AppBar(

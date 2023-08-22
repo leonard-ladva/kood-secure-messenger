@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:cryptography_repository/cryptography_repository.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// {@template local_storage_repository}
@@ -9,6 +12,7 @@ class LocalStorageRepository {
 
   static init() async {
     await Hive.initFlutter();
+    Hive.registerAdapter(KeySetAdapter());
   }
 
   static final userPrefrencesBoxName = 'userPreferences';
@@ -33,6 +37,25 @@ class LocalStorageRepository {
   }
 
   bool isAppLockEnabled(String userId) {
-    return _userPreferencesBox.get('$userId-isAppLockEnabled', defaultValue: false);
+    return _userPreferencesBox.get('$userId-isAppLockEnabled',
+        defaultValue: false);
+  }
+
+  void saveUserKeySet(String userId, KeySet keyset) {
+    _userPreferencesBox.put('$userId-keySet', keyset);
+  }
+
+  KeySet getUserKeySet(String userId) {
+    return _userPreferencesBox.get('$userId-keySet');
+  }
+
+  void saveCombinedKey(String roomId, Uint8List combinedKey) {
+    _userPreferencesBox.put('$roomId-combinedKey', combinedKey);
+  }
+  Uint8List? getCombinedKey(String roomId) {
+    return _userPreferencesBox.get('$roomId-combinedKey');
+  }
+  bool isCombinedKeySaved(String roomId) {
+    return _userPreferencesBox.containsKey('$roomId-combinedKey');
   }
 }

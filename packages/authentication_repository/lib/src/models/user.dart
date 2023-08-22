@@ -35,7 +35,7 @@ class User extends Equatable {
   ///
   final OnboardingFlowStatus? onboardingFlowStatus;
 
-  final String? publicKey;
+  final Map<String, dynamic>? publicKey;
 
   /// Empty user which represents an unauthenticated user.
   static const empty = User(id: '');
@@ -55,7 +55,7 @@ class User extends Equatable {
     String? name,
     String? photo,
     OnboardingFlowStatus? onboardingFlowStatus,
-    String? publicKey,
+    Map<String, dynamic>? publicKey,
   }) {
     return User(
       email: email ?? this.email,

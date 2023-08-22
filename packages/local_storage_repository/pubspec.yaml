@@ -7,6 +7,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  cryptography_repository:
+    path: ../cryptography_repository
   flutter:
     sdk: flutter
   hive: ^2.2.3

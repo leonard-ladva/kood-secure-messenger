@@ -38,14 +38,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final LocalAuthentication _localAuthentication = LocalAuthentication();
   late final StreamSubscription<User> _userSubscription;
 
-  void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) {
-    emit(
-      event.user.isNotEmpty
-          ? _localStorageRepository.isAppLockEnabled(event.user.id)
-              ? AppState.locked(_authenticationRepository.currentUser)
-              : AppState.authenticated(_authenticationRepository.currentUser)
-          : AppState.unauthenticated(),
-    );
+  void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) async {
+    final state = event.user.isNotEmpty
+        ? _localStorageRepository.isAppLockEnabled(event.user.id)
+            ? AppState.locked(_authenticationRepository.currentUser)
+            : AppState.authenticated(_authenticationRepository.currentUser)
+        : AppState.unauthenticated();
+    emit(state);
   }
 
   void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {

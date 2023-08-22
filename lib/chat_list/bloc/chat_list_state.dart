@@ -20,6 +20,7 @@ final class ChatListState extends Equatable {
           status: ChatListStatus.chatsLoaded,
           rooms: rooms,
         );
+  const ChatListState.failure(String? errorMessage) : this._(status: ChatListStatus.failure);
 
   final ChatListStatus status;
   final List<ChatRoom>? rooms;

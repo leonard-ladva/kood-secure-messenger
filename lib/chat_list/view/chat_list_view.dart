@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:relay/chat/chat.dart';
 import 'package:relay/chat_list/bloc/chat_list_bloc.dart';
+import 'package:relay/encrypted_chat/encrypted_chat.dart';
 import 'package:relay/helpers/src/initials.dart';
 
 class ChatListView extends StatelessWidget {
@@ -55,6 +56,11 @@ class ChatListView extends StatelessWidget {
                   room.otherUser?.name ?? '',
                   style: TextStyle(fontSize: 18),
                 ),
+                trailing: IconButton(
+                    icon: Icon(Icons.lock),
+                    onPressed: () {
+                      Navigator.of(context).push(EncryptedChatPage.route(room));
+                    }),
               );
             },
           );

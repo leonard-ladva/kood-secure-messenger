@@ -13,7 +13,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       photo: json['photo'] as String?,
       onboardingFlowStatus: $enumDecodeNullable(
           _$OnboardingFlowStatusEnumMap, json['onboardingFlowStatus']),
-      publicKey: json['publicKey'] as String?,
+      publicKey: json['publicKey'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{

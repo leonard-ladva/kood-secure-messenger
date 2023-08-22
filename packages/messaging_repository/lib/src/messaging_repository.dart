@@ -3,6 +3,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:messaging_repository/messaging_repository.dart';
+import 'package:messaging_repository/src/models/encrypted_message.dart';
 import 'package:mime/mime.dart';
 import 'package:storage_bucket_repository/storage_bucket_repository.dart';
 
@@ -211,7 +212,6 @@ class MessagingRepository {
             type: fileType,
           ),
         );
-
       }
 
       await _firestore
@@ -283,6 +283,71 @@ class MessagingRepository {
       });
     } catch (e) {
       throw SetTypingStatusFailure(e.toString());
+    }
+  }
+
+  Stream<List<EncryptedMessage>> get encryptedMessages =>
+      _encryptedMessagesStreamController.stream;
+  final _encryptedMessagesStreamController =
+      StreamController<List<EncryptedMessage>>.broadcast();
+  late StreamSubscription<QuerySnapshot> _firestoreEncryptedMessagesStream;
+
+  void ecryptedChatMessagesStreamSetup(String roomId) {
+    _encryptedMessagesStreamController.onListen = () {
+      _firestoreEncryptedMessagesStream = _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('encrypted-messages')
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .listen((snapshot) => _onNewEncryptedMessagesDataReceived(snapshot));
+    };
+    _encryptedMessagesStreamController.onCancel = () {
+      _firestoreEncryptedMessagesStream.cancel();
+    };
+  }
+
+  void _onNewEncryptedMessagesDataReceived(QuerySnapshot snapshot) async {
+    if (_encryptedMessagesStreamController.isClosed) return;
+    if (_encryptedMessagesStreamController.hasListener == false) return;
+
+    try {
+      final updatedMessages = snapshot.docs.map((doc) {
+        final message =
+            EncryptedMessage.fromJson(doc.data() as Map<String, dynamic>);
+        return message.copyWith(id: doc.id);
+      }).toList();
+
+      _encryptedMessagesStreamController.add(updatedMessages);
+    } catch (e) {
+      _encryptedMessagesStreamController.addError(e);
+    }
+  }
+ 
+  Future<void> sendEncryptedMessage(String roomId, EncryptedMessage message) async {
+    try {
+      await _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('encrypted-messages')
+          .add(message.toJson());
+    } catch (e) {
+      throw SendMessageFailure(e.toString());
+    }
+  }
+
+  Future<void> setEncryptedMessageAsRead(String roomId, String messageId) async {
+    try {
+      await _firestore
+          .collection('chats')
+          .doc(roomId)
+          .collection('encrypted-messages')
+          .doc(messageId)
+          .update({
+        'isRead': true,
+      });
+    } catch (e) {
+      throw SetMessageAsReadFailure(e.toString());
     }
   }
 }

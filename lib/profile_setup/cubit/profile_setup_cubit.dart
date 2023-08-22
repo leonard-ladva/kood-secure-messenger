@@ -1,30 +1,37 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cryptography/cryptography.dart';
+import 'package:cryptography_repository/cryptography_repository.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:storage_bucket_repository/storage_bucket_repository.dart';
 
 part 'profile_setup_state.dart';
 
 class ProfileSetupCubit extends Cubit<ProfileSetupState> {
-  ProfileSetupCubit(
-      {required AuthenticationRepository authenticationRepository,
-      required DatabaseRepository databaseRepository,
-      required StorageBucketRepository storageBucketRepository})
-      : _authenticationRepository = authenticationRepository,
+  ProfileSetupCubit({
+    required AuthenticationRepository authenticationRepository,
+    required CryptographyRepository cryptographyRepository,
+    required DatabaseRepository databaseRepository,
+    required StorageBucketRepository storageBucketRepository,
+    required LocalStorageRepository localStorageRepository,
+  })  : _authenticationRepository = authenticationRepository,
+        _cryptographyRepository = cryptographyRepository,
         _databaseRepository = databaseRepository,
         _storageBucketRepository = storageBucketRepository,
+        _localStorageRepository = localStorageRepository,
         super(ProfileSetupState());
+
   final AuthenticationRepository _authenticationRepository;
+  final CryptographyRepository _cryptographyRepository;
   final DatabaseRepository _databaseRepository;
   final StorageBucketRepository _storageBucketRepository;
+  final LocalStorageRepository _localStorageRepository;
 
   void pickImageClicked() {
     try {
@@ -92,10 +99,8 @@ class ProfileSetupCubit extends Cubit<ProfileSetupState> {
       }
     }
 
-    final keyAlgorithm = X25519();
-    final userKeyPair = await keyAlgorithm.newKeyPair();
-    final userPublicKey = await userKeyPair.extractPublicKey();
-    final userPublicKeyString = base64Encode(userPublicKey.bytes);
+    final myKeySet = await _cryptographyRepository.generateKeySet();
+    _localStorageRepository.saveUserKeySet(currentUser.id, myKeySet);
 
     try {
       await _databaseRepository.saveUser(
@@ -104,7 +109,7 @@ class ProfileSetupCubit extends Cubit<ProfileSetupState> {
           name: state.name.value.trim(),
           photo: photoUrl,
           email: currentUser.email,
-          publicKey: userPublicKeyString,
+          publicKey: myKeySet.publicKey,
         ),
       );
       emit(state.copyWith(status: FormzSubmissionStatus.success));

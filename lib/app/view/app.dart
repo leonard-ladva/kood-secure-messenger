@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cryptography_repository/cryptography_repository.dart';
 import 'package:database_repository/database_repository.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,9 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider<AuthenticationRepository>.value(
           value: _authenticationRepository,
+        ),
+        RepositoryProvider<CryptographyRepository>.value(
+          value: CryptographyRepository(),
         ),
         RepositoryProvider<DatabaseRepository>.value(
           value: _databaseRepository,

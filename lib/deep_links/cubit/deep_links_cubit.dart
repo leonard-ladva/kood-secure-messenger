@@ -29,15 +29,12 @@ class DeepLinksCubit extends Cubit<DeepLinksState> {
   }
 
   Future<void> _handleIncomingLink(Uri? uri) async {
-    print('new incomgin link');
-    print(uri.toString());
     if (uri == null) return;
     final profileRouteRegex = RegExp(r'\/user\/(?<userId>[a-zA-Z0-9]{28}$)');
 
     final profileRouteMatch = profileRouteRegex.firstMatch(uri.path);
     if (profileRouteMatch != null) {
       final userId = profileRouteMatch.namedGroup('userId');
-      print(userId);
       emit(
         DeepLinksState.newLinkReceived(ProfilePage(userId ?? '')),
       );

@@ -7,7 +7,8 @@ part 'start_chat_state.dart';
 class StartChatCubit extends Cubit<StartChatState> {
   StartChatCubit({
     required MessagingRepository messagingRepository,
-  })  : _messagingRepository = messagingRepository,
+  })  :
+        _messagingRepository = messagingRepository,
         super(StartChatState.initial());
 
   final MessagingRepository _messagingRepository;
@@ -21,11 +22,9 @@ class StartChatCubit extends Cubit<StartChatState> {
         emit(StartChatState.success(room));
         return;
       }
-
       await _messagingRepository.makeRoom(userId);
       final room = await _messagingRepository.getRoom(userId);
       emit(StartChatState.success(room));
-
     } on RoomExistsFailure catch (e) {
       emit(StartChatState.failure(e.message));
     } on MakeRoomFailure catch (e) {
