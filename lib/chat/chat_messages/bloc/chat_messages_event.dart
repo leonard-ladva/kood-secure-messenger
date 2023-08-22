@@ -56,3 +56,13 @@ final class DeleteMessage extends ChatMessagesEvent {
   @override
   List<Object> get props => [message];
 }
+
+final class EditMessage extends ChatMessagesEvent {
+  const EditMessage(this.newText, this.message);
+
+  final String newText;
+  final ChatMessage message;
+
+  @override
+  List<Object> get props => [message];
+}

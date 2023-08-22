@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:messaging_repository/messaging_repository.dart';
 import 'package:relay/app/app.dart';
 import 'package:relay/chat/chat.dart';
+import 'package:relay/chat/chat_messages/widgets/message_long_click_dialog.dart';
 import 'package:video_player/video_player.dart';
 
 const largeRadius = Radius.circular(16);
@@ -238,28 +239,19 @@ class _TextContent extends StatelessWidget {
     return GestureDetector(
       onLongPress: () async {
         if (!isFromMe) return;
-        final bool result = await showDialog(
+        final LongPressDialogReturnValues result = await showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Delete message?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text('Delete'),
-              ),
-            ],
-          ),
+          builder: (context) => LongPressDialog(),
         );
-        if (result != true) return;
-        context.read<ChatMessagesBloc>().add(DeleteMessage(message));
+
+        if (result.delete == false && result.edit == false) return;
+        if (result.delete) {
+          context.read<ChatMessagesBloc>().add(DeleteMessage(message));
+          return;
+        }
+        context
+            .read<ChatMessagesBloc>()
+            .add(EditMessage(result.newText, message));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),

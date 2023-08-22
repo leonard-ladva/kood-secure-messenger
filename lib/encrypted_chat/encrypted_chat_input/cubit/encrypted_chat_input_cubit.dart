@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cryptography_repository/cryptography_repository.dart';
-import 'package:database_repository/database_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
 import 'package:messaging_repository/messaging_repository.dart';
@@ -18,18 +17,15 @@ class EncryptedChatInputCubit extends Cubit<EncryptedChatInputState> {
     required CryptographyRepository cryptographyRepository,
     required MessagingRepository messagingRepository,
     required LocalStorageRepository localStorageRepository,
-    required DatabaseRepository databaseRepository,
     required ChatRoom room,
   })  : _authenticationRepository = authenticationRepository,
         _cryptographyRepository = cryptographyRepository,
-        _databaseRepository = databaseRepository,
         _messagingRepository = messagingRepository,
         _localStorageRepository = localStorageRepository,
         _room = room,
         super(EncryptedChatInputState.initial());
 
   final AuthenticationRepository _authenticationRepository;
-  final DatabaseRepository _databaseRepository;
   final CryptographyRepository _cryptographyRepository;
   final MessagingRepository _messagingRepository;
   final LocalStorageRepository _localStorageRepository;

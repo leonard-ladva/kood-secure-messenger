@@ -1,6 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cryptography_repository/cryptography_repository.dart';
-import 'package:database_repository/database_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_storage_repository/local_storage_repository.dart';
@@ -16,7 +15,6 @@ class EncryptedChatInput extends StatelessWidget {
       create: (context) => EncryptedChatInputCubit(
         authenticationRepository: context.read<AuthenticationRepository>(),
         messagingRepository: context.read<MessagingRepository>(),
-        databaseRepository: context.read<DatabaseRepository>(),
         localStorageRepository: context.read<LocalStorageRepository>(),
         cryptographyRepository: context.read<CryptographyRepository>(),
         room: room,
