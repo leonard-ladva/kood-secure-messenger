@@ -4,9 +4,9 @@ Relay is a secure instant messaging app built using Flutter & Firebase.
 🔒 End-to-end encryption<br>
 🆔 Biometric authentication<br>
 📢 Share Profile With QR<br>
-🖼️ Send Images & Videos
-💬 Typing Indicators
-👤 Leave notes to yourself
+🖼️ Send Images & Videos<br>
+💬 Typing Indicators<br>
+👤 Leave notes to yourself<br>
 📺 Video Playback
 
 <h2>Installation</h2>
