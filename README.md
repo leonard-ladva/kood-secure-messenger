@@ -1,5 +1,5 @@
 <h1>Relay - a secure-messenger</h1>
-Relay is a secure messaging app built using FLutter & Firebase.
+Relay is a secure messaging app built using Flutter & Firebase.
 <h2>Features</h2>
 🔒 End-to-end encryption<br>
 🫆 Biometric authentication 
